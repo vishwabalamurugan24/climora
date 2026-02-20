@@ -1,0 +1,25 @@
+﻿Analyzing climora...                                            
+
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\navigation_screen.dart:138:37 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\navigation_screen.dart:145:39 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\recovery_screen.dart:129:37 - deprecated_member_use
+   info - Unnecessary use of 'toList' in a spread - lib\screens\weather_screen.dart:444:20 - unnecessary_to_list_in_spreads
+   info - Statements in an if should be enclosed in a block - lib\services\weather_service.dart:93:7 - curly_braces_in_flow_control_structures
+
+flutter : 5 issues found. 
+(ran in 7.5s)
+At line:1 char:1
++ flutter analyze --no-pub 
+> final_issues.txt 2>&1 ; 
+powershell -Comman ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo         
+     : NotSpeci    fied: 
+(5 issues f    ound. (ran 
+in 7.5    s):String) [], 
+Re    moteException
+    + FullyQualifiedE    
+rrorId : NativeCo    
+mmandError
+ 

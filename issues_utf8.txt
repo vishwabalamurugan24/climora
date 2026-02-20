@@ -1,0 +1,54 @@
+﻿Analyzing climora...                                            
+
+   info - Statements in an if should be enclosed in a block - lib\domain\usecases\get_recommended_music.dart:19:7 - curly_braces_in_flow_control_structures
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\main.dart:236:38 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\widgets\voice_orb.dart:57:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\widgets\voice_orb.dart:60:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\widgets\voice_orb.dart:80:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\presentation\widgets\voice_orb.dart:110:30 - deprecated_member_use
+   info - Statements in an if should be enclosed in a block - lib\presentation\widgets\voice_orb.dart:128:11 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\presentation\widgets\voice_orb.dart:130:11 - curly_braces_in_flow_control_structures
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\navigation_screen.dart:138:37 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\recovery_screen.dart:109:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\recovery_screen.dart:129:37 - deprecated_member_use
+   info - Statements in an if should be enclosed in a block - lib\screens\stt_emotion.dart:85:9 - curly_braces_in_flow_control_structures
+   info - Don't use 'BuildContext's across async gaps - lib\screens\weather_screen.dart:359:42 - use_build_context_synchronously
+   info - Statements in an if should be enclosed in a block - lib\screens\weather_screen.dart:435:31 - curly_braces_in_flow_control_structures
+   info - Unnecessary use of 'toList' in a spread - lib\screens\weather_screen.dart:441:20 - unnecessary_to_list_in_spreads
+   info - Statements in an if should be enclosed in a block - lib\services\recommendation_engine.dart:89:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\services\recommendation_engine.dart:91:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\services\recommendation_engine.dart:93:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\services\recommendation_engine.dart:95:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\services\recommendation_engine.dart:100:7 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\services\recommendation_engine.dart:123:13 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\services\recommendation_engine.dart:129:15 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\services\recommendation_engine.dart:131:15 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\services\recommendation_engine.dart:133:15 - curly_braces_in_flow_control_structures
+   info - The constant name 'Morning' isn't a lowerCamelCase identifier - lib\services\weather_music_settings.dart:1:18 - constant_identifier_names
+   info - The constant name 'Afternoon' isn't a lowerCamelCase identifier - lib\services\weather_music_settings.dart:1:27 - constant_identifier_names
+   info - The constant name 'Evening' isn't a lowerCamelCase identifier - lib\services\weather_music_settings.dart:1:38 - constant_identifier_names
+   info - The constant name 'Night' isn't a lowerCamelCase identifier - lib\services\weather_music_settings.dart:1:47 - constant_identifier_names
+warning - The '!' will have no effect because the receiver can't be null - lib\services\weather_service.dart:44:51 - unnecessary_non_null_assertion
+   info - The local variable '_use' starts with an underscore - lib\shims\just_audio.dart:25:11 - no_leading_underscores_for_local_identifiers
+   info - The local variable '_ignore' starts with an underscore - lib\shims\just_audio.dart:32:11 - no_leading_underscores_for_local_identifiers
+
+flutter : 31 issues 
+found. (ran in 4.8s)
+At line:1 char:1
++ flutter analyze 
+--no-pub > 
+issues_final.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    + CategoryInfo    
+          : 
+NotSpecified: (31     
+issues found. (ran in 
+    4.8s):String) [], 
+Remo    teException
+    + 
+FullyQualifiedErrorI  
+  d : 
+NativeCommandError
+ 

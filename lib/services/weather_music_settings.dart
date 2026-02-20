@@ -1,6 +1,8 @@
-// Weather-based music automation settings model
 enum TimeRange { morning, afternoon, evening, night }
-enum WeatherTrigger { rainy, sunny, cloudy, cold, hot }
+
+enum WeatherTrigger { rainy, sunny, cloudy, cold, hot, clear, windy, foggy }
+
+enum SongMood { calm, energetic, happy, sad, focus, relaxed }
 
 class WeatherMusicSettings {
   bool enabled;
@@ -19,11 +21,26 @@ class WeatherMusicSettings {
     Set<String>? genres,
     Duration? autoPlayDuration,
     this.smartNotifications = false,
-  })  : timeRanges = timeRanges ?? {TimeRange.morning, TimeRange.afternoon, TimeRange.evening, TimeRange.night},
-        weatherTriggers = weatherTriggers ?? {WeatherTrigger.rainy, WeatherTrigger.sunny, WeatherTrigger.cloudy, WeatherTrigger.cold, WeatherTrigger.hot},
-        languages = languages ?? {'English'},
-        genres = genres ?? {'lo-fi', 'melody', 'classical'},
-        autoPlayDuration = autoPlayDuration ?? const Duration(minutes: 30);
+  }) : timeRanges =
+           timeRanges ??
+           {
+             TimeRange.morning,
+             TimeRange.afternoon,
+             TimeRange.evening,
+             TimeRange.night,
+           },
+       weatherTriggers =
+           weatherTriggers ??
+           {
+             WeatherTrigger.rainy,
+             WeatherTrigger.sunny,
+             WeatherTrigger.cloudy,
+             WeatherTrigger.cold,
+             WeatherTrigger.hot,
+           },
+       languages = languages ?? {'English'},
+       genres = genres ?? {'lo-fi', 'melody', 'classical'},
+       autoPlayDuration = autoPlayDuration ?? const Duration(minutes: 30);
 
   WeatherMusicSettings copyWith({
     bool? enabled,

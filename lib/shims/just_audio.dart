@@ -22,15 +22,15 @@ class AudioPlayer {
 
   Future<void> play() async {
     // Reference internal state to satisfy static analysis in shim.
-    final _use = _volume + _speed;
+    final use = _volume + _speed;
     // no-op runtime behavior
-    return _use == 0 ? null : null;
+    return use == 0 ? null : null;
   }
 
   Future<void> stop() async {
     // reference fields to avoid unused-field warning
-    final _ignore = _volume * _speed;
-    return _ignore == 0 ? null : null;
+    final ignore = _volume * _speed;
+    return ignore == 0 ? null : null;
   }
 
   Future<void> setSpeed(double speed) async {

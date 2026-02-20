@@ -41,11 +41,13 @@ class WeatherService {
   final String? _apiKey = Platform.environment['OPENWEATHER_API_KEY'];
   static const _cacheKey = '_last_weather_raw';
 
-  bool get hasApiKey => _apiKey != null && _apiKey!.isNotEmpty;
+  bool get hasApiKey => _apiKey != null && _apiKey.isNotEmpty;
 
   /// Fetch weather for the current device location. If no API key is configured
   /// and [allowMock] is true, returns a cached value or a reasonable mock WeatherData.
-  Future<WeatherData?> getWeatherForCurrentLocation({bool allowMock = true}) async {
+  Future<WeatherData?> getWeatherForCurrentLocation({
+    bool allowMock = true,
+  }) async {
     try {
       final pos = await getCurrentPosition();
       if (_apiKey == null || _apiKey.isEmpty) {
@@ -81,11 +83,15 @@ class WeatherService {
       throw Exception('Location permissions are permanently denied');
     }
 
-    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    return await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
   }
 
   Future<WeatherData> fetchWeather(double lat, double lon) async {
-    if (_apiKey == null || _apiKey.isEmpty) throw Exception('OPENWEATHER_API_KEY not set in .env');
+    if (_apiKey == null || _apiKey.isEmpty) {
+      throw Exception('OPENWEATHER_API_KEY not set in .env');
+    }
 
     final uri = Uri.https('api.openweathermap.org', '/data/2.5/weather', {
       'lat': lat.toString(),
@@ -99,13 +105,18 @@ class WeatherService {
     final response = await request.close().timeout(const Duration(seconds: 12));
     final body = await response.transform(utf8.decoder).join();
     client.close();
-    if (response.statusCode != 200) throw Exception('Weather API error: ${response.statusCode}');
+    if (response.statusCode != 200) {
+      throw Exception('Weather API error: ${response.statusCode}');
+    }
 
     // cache raw response and timestamp for fallback
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_cacheKey, body);
-      await prefs.setString('${_cacheKey}_ts', DateTime.now().toIso8601String());
+      await prefs.setString(
+        '${_cacheKey}_ts',
+        DateTime.now().toIso8601String(),
+      );
     } catch (_) {}
 
     final j = jsonDecode(body) as Map<String, dynamic>;
