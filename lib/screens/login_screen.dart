@@ -277,7 +277,7 @@ class _LoginForm extends StatelessWidget {
 
         // Submit Button
         GestureDetector(
-          onTap: () => Navigator.pushReplacementNamed(context, '/'),
+          onTap: () => Navigator.pushReplacementNamed(context, '/home'),
           child: Container(
             height: 56,
             width: double.infinity,

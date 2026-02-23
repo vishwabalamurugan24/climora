@@ -178,13 +178,7 @@ class _LogoSection extends StatelessWidget {
               letterSpacing: 4,
               color: Colors.white,
             ),
-            children: [
-              const TextSpan(text: 'CLIMORA '),
-              TextSpan(
-                text: 'AI',
-                style: TextStyle(color: primaryColor),
-              ),
-            ],
+            children: [const TextSpan(text: 'CLIMORA')],
           ),
         ),
         const SizedBox(height: 4),

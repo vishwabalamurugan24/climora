@@ -179,7 +179,7 @@ class _HeaderSection extends StatelessWidget {
                   Icon(Icons.hub_outlined, color: primaryColor, size: 32),
                   const SizedBox(width: 8),
                   Text(
-                    'Climora AI',
+                    'Climora',
                     style: GoogleFonts.spaceGrotesk(
                       textStyle: const TextStyle(
                         fontSize: 20,
@@ -585,7 +585,7 @@ class _BottomNavBar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 GestureDetector(
-                  onTap: () => Navigator.pushReplacementNamed(context, '/'),
+                  onTap: () => Navigator.pushReplacementNamed(context, '/home'),
                   child: _NavButton(
                     icon: Icons.home_outlined,
                     label: 'Home',
