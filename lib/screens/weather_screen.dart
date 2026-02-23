@@ -229,14 +229,14 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () => Navigator.pop(ctx),
                           child: const Text('Cancel'),
                         ),
                         const SizedBox(width: 12),
                         ElevatedButton(
                           onPressed: () {
                             setState(() => _settings = temp);
-                            Navigator.pop(context);
+                            Navigator.pop(ctx);
                           },
                           child: const Text('Save'),
                         ),

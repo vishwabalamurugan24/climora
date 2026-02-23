@@ -3,10 +3,18 @@ import 'dart:math' as math;
 import 'core/theme/app_theme.dart';
 import 'presentation/widgets/aura_background.dart';
 import 'presentation/widgets/voice_orb.dart';
-import 'screens/stt_emotion.dart';
 import 'screens/weather_screen.dart';
 import 'screens/navigation_screen.dart';
 import 'screens/recovery_screen.dart';
+import 'screens/home_screen.dart';
+import 'screens/profile_screen.dart';
+import 'screens/map_screen.dart';
+import 'screens/explore_screen.dart';
+import 'screens/playlist_screen.dart';
+import 'screens/player_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/signup_screen.dart';
+import 'widgets/assistant_overlay.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'presentation/blocs/aura/aura_bloc.dart';
@@ -29,12 +37,23 @@ class ClimoraApp extends StatelessWidget {
       title: 'Climora',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
-      home: const ClimoraHomeScreen(),
+      builder: (context, child) {
+        return AssistantOverlay(child: child!);
+      },
+      home: const LoginScreen(),
       routes: {
-        '/stt': (_) => const SttEmotionScreen(),
+        '/login': (_) => const LoginScreen(),
+        '/signup': (_) => const SignupScreen(),
+        '/home': (_) => const HomeScreen(),
+        '/aura_home': (_) => const ClimoraHomeScreen(),
         '/weather': (_) => const WeatherScreen(),
         '/navigation': (_) => const NavigationScreen(),
         '/recovery': (_) => const RecoveryScreen(),
+        '/profile': (_) => const ProfileScreen(),
+        '/map': (_) => const MapScreen(),
+        '/explore': (_) => const ExploreScreen(),
+        '/playlist': (_) => const PlaylistScreen(),
+        '/player': (_) => const PlayerScreen(),
       },
     );
   }
@@ -145,9 +164,9 @@ class _ClimoraHomeScreenState extends State<ClimoraHomeScreen> {
                             Expanded(
                               child: _buildGlassAction(
                                 context,
-                                title: 'Music',
-                                icon: Icons.music_note_outlined,
-                                route: '/stt',
+                                title: 'Explore',
+                                icon: Icons.explore_outlined,
+                                route: '/explore',
                               ),
                             ),
                           ],
@@ -155,7 +174,7 @@ class _ClimoraHomeScreenState extends State<ClimoraHomeScreen> {
                         const SizedBox(height: 16),
                         _buildFullWidthAction(
                           context,
-                          title: 'Explore Nearby Destinations',
+                          title: 'Nearby Discoveries',
                           subtitle: 'Find your perfect mood spot',
                           icon: Icons.map_outlined,
                           route: '/navigation',

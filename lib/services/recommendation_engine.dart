@@ -1,6 +1,7 @@
 import 'package:climora/services/weather_service.dart';
 import 'package:climora/services/weather_music_settings.dart';
-import 'package:climora/services/emotion_service.dart';
+
+enum SongMood { relaxed, focus, energetic, happy, calm, sad }
 
 class SongMetadata {
   final String id;
@@ -77,7 +78,6 @@ class RecommendationEngine {
   List<SongMetadata> getRecommendations({
     required WeatherData weather,
     required WeatherMusicSettings settings,
-    EmotionResult? emotion,
     DateTime? currentTime,
   }) {
     final now = currentTime ?? DateTime.now();
@@ -137,20 +137,6 @@ class RecommendationEngine {
           }
           if (settings.timeRanges.contains(currentTR)) {
             score += 0.5;
-          }
-          if (emotion != null) {
-            final label = emotion.label.toLowerCase();
-            if (label.contains('happy') &&
-                song.moods.contains(SongMood.happy)) {
-              score += 2.0;
-            }
-            if (label.contains('sad') && song.moods.contains(SongMood.sad)) {
-              score += 2.0;
-            }
-            if (label.contains('stress') &&
-                song.moods.contains(SongMood.calm)) {
-              score += 2.0;
-            }
           }
           return _ScoredSong(song, score);
         })
