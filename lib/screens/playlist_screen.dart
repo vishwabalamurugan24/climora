@@ -59,7 +59,8 @@ class PlaylistScreen extends StatelessWidget {
                       children: [
                         _CircularIconButton(
                           icon: Icons.chevron_left,
-                          onTap: () => Navigator.pop(context),
+                          onTap: () =>
+                              Navigator.pushReplacementNamed(context, '/home'),
                         ),
                         _CircularIconButton(
                           icon: Icons.more_vert,

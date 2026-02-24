@@ -102,6 +102,12 @@ class _ClimateStatusPanel extends StatelessWidget {
                 children: [
                   Row(
                     children: [
+                      IconButton(
+                        icon: Icon(Icons.chevron_left, color: primaryColor),
+                        onPressed: () =>
+                            Navigator.pushReplacementNamed(context, '/home'),
+                      ),
+                      const SizedBox(width: 8),
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(

@@ -215,7 +215,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, '/home'),
                   child: const Text('Start Navigation'),
                 ),
               ),

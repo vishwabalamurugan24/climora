@@ -138,7 +138,7 @@ class _TopNavBar extends StatelessWidget {
         children: [
           _NavIcon(
             icon: Icons.chevron_left,
-            onTap: () => Navigator.pop(context),
+            onTap: () => Navigator.pushReplacementNamed(context, '/home'),
             primaryColor: primaryColor,
           ),
           Image.network(

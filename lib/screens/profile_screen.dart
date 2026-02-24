@@ -64,7 +64,7 @@ class _ProfileHeader extends StatelessWidget {
           _HeaderButton(
             icon: Icons.chevron_left,
             primaryColor: primaryColor,
-            onTap: () => Navigator.pop(context),
+            onTap: () => Navigator.pushReplacementNamed(context, '/home'),
           ),
           Text(
             'PROFILE',

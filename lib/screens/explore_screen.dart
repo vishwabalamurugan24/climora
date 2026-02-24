@@ -178,6 +178,12 @@ class _HeaderSection extends StatelessWidget {
             children: [
               Row(
                 children: [
+                  IconButton(
+                    icon: Icon(Icons.chevron_left, color: primaryColor),
+                    onPressed: () =>
+                        Navigator.pushReplacementNamed(context, '/home'),
+                  ),
+                  const SizedBox(width: 8),
                   Icon(Icons.hub_outlined, color: primaryColor, size: 32),
                   const SizedBox(width: 8),
                   Text(

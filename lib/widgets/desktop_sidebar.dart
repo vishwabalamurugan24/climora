@@ -92,6 +92,13 @@ class DesktopSidebar extends StatelessWidget {
                     onTap: () => _navigate(context, '/explore'),
                   ),
                   _SidebarItem(
+                    icon: Icons.map_outlined,
+                    label: 'Atmospheric Map',
+                    isActive: currentRoute == '/map',
+                    primaryColor: primaryColor,
+                    onTap: () => _navigate(context, '/map'),
+                  ),
+                  _SidebarItem(
                     icon: Icons.auto_awesome_outlined,
                     label: 'AI Playlists',
                     isActive: currentRoute == '/playlist',

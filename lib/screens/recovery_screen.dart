@@ -166,7 +166,10 @@ class _RecoveryScreenState extends State<RecoveryScreen>
                           ),
                           const SizedBox(height: 20),
                           ElevatedButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () => Navigator.pushReplacementNamed(
+                              context,
+                              '/home',
+                            ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white10,
                               foregroundColor: Colors.white,
