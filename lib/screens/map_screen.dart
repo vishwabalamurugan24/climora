@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/climora_bottom_nav.dart';
 import '../presentation/widgets/map_pathway_painter.dart';
@@ -14,6 +16,40 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _pulseController;
+  final MapController _mapController = MapController();
+
+  // Default center at Tokyo (as per your design ref)
+  final LatLng _center = const LatLng(35.6762, 139.6503);
+
+  final List<Map<String, dynamic>> _recommendations = [
+    {
+      'imageUrl':
+          'https://lh3.googleusercontent.com/aida-public/AB6AXuCSF2KuYvzImdWDfIaQMJynmOVZF5sbVTztMKvVIKwpFyTj3AxoxBWOiVIVXLoUwNpRPYqD6inV-2Dss4F2vnek4SvjRpBLhrVGufYjbC_rb7KUrlUVYNI3H62Sqz_mmB6ZS7NFMU_kD-AVnv-DySkEnw4kjnU_C49myawVDJBpfFj9ZZ-SRYzU2mi0NrRV3u2P8U-Qiq1yWim3_zWGEZxTZGu2j8DO5H6TBKhTHDSaTKN6LHJIve0xX_ZCfk8BbEsXeboWlrqx5xgc',
+      'title': 'The Blue Nook',
+      'subtitle': 'Bookstore • 0.5mi',
+      'tag': 'CALM',
+      'lat': 35.6800,
+      'lng': 139.6550,
+    },
+    {
+      'imageUrl':
+          'https://lh3.googleusercontent.com/aida-public/AB6AXuA9oZU_n3TxzSX8FlOGGOyQ7W0vvrJToTWz5fN6HJLkzKxy8UgIYJlR9JB2i82KNpLJvoA1F9R1BmMVc7Bh0P6da70demoBnMF_gfm6MgGOgrZcF17NEqu2vWbVGZk1zmjNsBIq5ZSLsmcnIqha17LOzL69MnqhSD3ORyTr_97PEl0rOPEKc2HULCkrScvzz4NUu52tX-cIDY6X_LTCHFGcmrl3iF2wsfTqwZ6LyXfHRAFxulV2xtvk8ASziI7tVa8Qy7FzBqQgkMpp',
+      'title': 'Misty Terrace',
+      'subtitle': 'Cafe • 1.2mi',
+      'tag': 'FOCUS',
+      'lat': 35.6720,
+      'lng': 139.6450,
+    },
+    {
+      'imageUrl':
+          'https://lh3.googleusercontent.com/aida-public/AB6AXuDFkMrYGxNSb0I2dStWTPa49DhVvlRTvaOxLpmhVvkBJKXxp-noPizuNdC9N4aRWo8ce011AqMi5B-JdjIsbOZyPdp1J3_-SSgp3iAQGuRyiQmRqQ-4XbfvSIxywQnj3AAQkl7O5ICt3XXtZCIYGb34KrPfhyxuGHDvDDtnFSzbStsosvCumHYB-OQhKwrq_1-OSZ8QlA2LNckqU_R1sYmA2-BMvVAJg2iCJMLBxeTGFvOrJhyZpO8BbOqBvcu1qQyKElFCi-viB73w',
+      'title': 'Zen Garden',
+      'subtitle': 'Park • 2.1mi',
+      'tag': 'CALM',
+      'lat': 35.6850,
+      'lng': 139.6400,
+    },
+  ];
 
   @override
   void initState() {
@@ -39,30 +75,41 @@ class _MapScreenState extends State<MapScreen>
       backgroundColor: backgroundDark,
       body: Stack(
         children: [
-          // Dark Map Background with Radial Gradient
+          // Live FlutterMap with Dark Tiles
           Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: RadialGradient(
-                  center: Alignment.center,
-                  radius: 1.5,
-                  colors: [Color(0xFF1E293B), Color(0xFF0F171A)],
-                ),
+            child: FlutterMap(
+              mapController: _mapController,
+              options: MapOptions(
+                initialCenter: _center,
+                initialZoom: 14.0,
+                backgroundColor: backgroundDark,
               ),
-            ),
-          ),
-
-          // Glowing Pathways Custom Paint
-          Positioned.fill(
-            child: AnimatedBuilder(
-              animation: _pulseController,
-              builder: (context, child) {
-                return CustomPaint(
-                  painter: MapPathwayPainter(
-                    pulseValue: _pulseController.value,
-                  ),
-                );
-              },
+              children: [
+                TileLayer(
+                  urlTemplate:
+                      'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+                  subdomains: const ['a', 'b', 'c', 'd'],
+                ),
+                MarkerLayer(
+                  markers: _recommendations.map((rec) {
+                    return Marker(
+                      point: LatLng(rec['lat'], rec['lng']),
+                      width: 60,
+                      height: 60,
+                      child: AnimatedBuilder(
+                        animation: _pulseController,
+                        builder: (context, child) {
+                          return CustomPaint(
+                            painter: MapPathwayPainter(
+                              pulseValue: _pulseController.value,
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
           ),
 
@@ -205,37 +252,31 @@ class _MapScreenState extends State<MapScreen>
                       const SizedBox(height: 12),
                       SizedBox(
                         height: 180,
-                        child: ListView(
+                        child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          children: [
-                            _RecCard(
-                              imageUrl:
-                                  'https://lh3.googleusercontent.com/aida-public/AB6AXuCSF2KuYvzImdWDfIaQMJynmOVZF5sbVTztMKvVIKwpFyTj3AxoxBWOiVIVXLoUwNpRPYqD6inV-2Dss4F2vnek4SvjRpBLhrVGufYjbC_rb7KUrlUVYNI7H62Sqz_mmB6ZS7NFMU_kD-AVnv-DySkEnw4kjnU_C49myawVDJBpfFj9ZZ-SRYzU2mi0NrRV3u2P8U-Qiq1yWim3_zWGEZxTZGu2j8DO5H6TBKhTHDSaTKN6LHJIve0xX_ZCfk8BbEsXeboWlrqx5xgc',
-                              title: 'The Blue Nook',
-                              subtitle: 'Bookstore • 0.5mi',
-                              tag: 'CALM',
-                              primaryColor: primaryColor,
-                            ),
-                            const SizedBox(width: 12),
-                            _RecCard(
-                              imageUrl:
-                                  'https://lh3.googleusercontent.com/aida-public/AB6AXuA9oZU_n3TxzSX8FlOGGOyQ7W0vvrJToTWz5fN6HJLkzKxy8UgIYJlR9JB2i82KNpLJvoA1F9R1BmMVc7Bh0P6da70demoBnMF_gfm6MgGOgrZcF17NEqu2vWbVGZk1zmjNsBIq5ZSLsmcnIqha17LOzL69MnqhSD3ORyTr_97PEl0rOPEKc2HULCkrScvzz4NUu52tX-cIDY6X_LTCHFGcmrl3iF2wsfTqwZ6LyXfHRAFxulV2xtvk8ASziI7tVa8Qy7FzBqQgkMpp',
-                              title: 'Misty Terrace',
-                              subtitle: 'Cafe • 1.2mi',
-                              tag: 'FOCUS',
-                              primaryColor: primaryColor,
-                            ),
-                            const SizedBox(width: 12),
-                            _RecCard(
-                              imageUrl:
-                                  'https://lh3.googleusercontent.com/aida-public/AB6AXuDFkMrYGxNSb0I2dStWTPa49DhVvlRTvaOxLpmhVvkBJKXxp-noPizuNdC9N4aRWo8ce011AqMi5B-JdjIsbOZyPdp1J3_-SSgp3iAQGuRyiQmRqQ-4XbfvSIxywQnj3AAQkl7O5ICt3XXtZCIYGb34KrPfhyxuGHDvDDtnFSzbStsosvCumHYB-OQhKwrq_1-OSZ8QlA2LNckqU_R1sYmA2-BMvVAJg2iCJMLBxeTGFvOrJhyZpO8BbOqBvcu1qQyKElFCi-viB73w',
-                              title: 'Zen Garden',
-                              subtitle: 'Park • 2.1mi',
-                              tag: 'CALM',
-                              primaryColor: primaryColor,
-                            ),
-                          ],
+                          itemCount: _recommendations.length,
+                          itemBuilder: (context, index) {
+                            final rec = _recommendations[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 12.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  _mapController.move(
+                                    LatLng(rec['lat'], rec['lng']),
+                                    16.0,
+                                  );
+                                },
+                                child: _RecCard(
+                                  imageUrl: rec['imageUrl'],
+                                  title: rec['title'],
+                                  subtitle: rec['subtitle'],
+                                  tag: rec['tag'],
+                                  primaryColor: primaryColor,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
@@ -259,21 +300,33 @@ class _MapScreenState extends State<MapScreen>
               children: [
                 _GlassIconButton(
                   icon: Icons.add,
-                  onTap: () {},
+                  onTap: () {
+                    _mapController.move(
+                      _mapController.camera.center,
+                      _mapController.camera.zoom + 1,
+                    );
+                  },
                   primaryColor: primaryColor,
                   isSquare: true,
                 ),
                 const SizedBox(height: 8),
                 _GlassIconButton(
                   icon: Icons.remove,
-                  onTap: () {},
+                  onTap: () {
+                    _mapController.move(
+                      _mapController.camera.center,
+                      _mapController.camera.zoom - 1,
+                    );
+                  },
                   primaryColor: primaryColor,
                   isSquare: true,
                 ),
                 const SizedBox(height: 16),
                 _GlassIconButton(
                   icon: Icons.near_me,
-                  onTap: () {},
+                  onTap: () {
+                    _mapController.move(_center, 14.0);
+                  },
                   primaryColor: primaryColor,
                   isSquare: true,
                   iconColor: primaryColor,
