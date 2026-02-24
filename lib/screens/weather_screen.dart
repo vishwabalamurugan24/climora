@@ -4,6 +4,7 @@ import '../services/weather_utils.dart';
 import '../services/audio_service.dart';
 import '../services/weather_music_settings.dart';
 import '../services/recommendation_service.dart';
+import '../widgets/climora_bottom_nav.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
@@ -256,193 +257,206 @@ class _WeatherScreenState extends State<WeatherScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Weather')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            Row(
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView(
+              padding: const EdgeInsets.only(bottom: 100),
               children: [
-                Switch(
-                  value: _settings.enabled,
-                  onChanged: (v) => setState(
-                    () => _settings = _settings.copyWith(enabled: v),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  _settings.enabled
-                      ? 'Weather-based Song Mode: ON'
-                      : 'Weather-based Song Mode: OFF',
-                ),
-                const Spacer(),
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  tooltip: 'Customize',
-                  onPressed: () => _showCustomizationPanel(context),
-                ),
-              ],
-            ),
-            const Divider(),
-            ElevatedButton(
-              onPressed: _load,
-              child: const Text('Get current weather'),
-            ),
-            const SizedBox(height: 16),
-            if (_loading) const Center(child: CircularProgressIndicator()),
-            if (_error != null)
-              Text('Error: $_error', style: const TextStyle(color: Colors.red)),
-            if (_weather != null) ...[
-              if (_lastUpdated != null)
-                Text('Last updated: ${_lastUpdated!.toLocal()} ($_dataSource)'),
-              if (_lastUpdated == null) Text('Source: $_dataSource'),
-              Text('Temperature: ${_weather!.temp} °C'),
-              Text('Humidity: ${_weather!.humidity}%'),
-              Text('Wind speed: ${_weather!.windSpeed} m/s'),
-              Text('Cloudiness: ${_weather!.cloudiness}%'),
-              Text('Description: ${_weather!.description}'),
-              Text('Precipitation (mm): ${_weather!.precipitation ?? 0}'),
-              const SizedBox(height: 12),
-              Text(
-                'Comfort index: ${ClimateIndices.comfortIndex(_weather!.temp, _weather!.humidity, _weather!.windSpeed)}',
-              ),
-              const SizedBox(height: 8),
-              Text('Suggested ambient sounds:'),
-              const SizedBox(height: 6),
-              Wrap(
-                spacing: 8,
-                children: _suggestions
-                    .map((s) => Chip(label: Text(s)))
-                    .toList(),
-              ),
-              const SizedBox(height: 12),
-              if (_currentRecommendation?.songMetadata != null) ...[
-                const Divider(),
-                const Text(
-                  'Recommended Song:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                ListTile(
-                  leading: const Icon(Icons.music_note, color: Colors.blue),
-                  title: Text(_currentRecommendation!.songMetadata!.title),
-                  subtitle: Text(_currentRecommendation!.songMetadata!.artist),
-                  trailing: Wrap(
-                    spacing: 4,
-                    children: _currentRecommendation!.songMetadata!.genres
-                        .map(
-                          (g) => Chip(
-                            label: Text(
-                              g,
-                              style: const TextStyle(fontSize: 10),
-                            ),
-                            padding: EdgeInsets.zero,
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () async {
-                    final meta = _currentRecommendation!.songMetadata!;
-                    if (!_audio.isLoaded(meta.id)) {
-                      await _audio.loadAsset(
-                        meta.id,
-                        meta.assetPath,
-                        volume: _currentRecommendation!.volume,
-                      );
-                    }
-                    await _audio.setSpeed(
-                      meta.id,
-                      _currentRecommendation!.speed,
-                    );
-                    await _audio.play(meta.id);
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Playing ${meta.title}...')),
-                      );
-                    }
-                  },
-                  icon: const Icon(Icons.play_arrow),
-                  label: const Text('Play Recommended'),
-                ),
-                const Divider(),
-              ],
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  ElevatedButton(
-                    onPressed: _suggestions.isEmpty
-                        ? null
-                        : () async {
-                            if (!_playing) {
-                              // load assets for suggestions (user should place matching files in assets/audio/)
-                              for (final s in _suggestions) {
-                                final path = 'assets/audio/$s.mp3';
-                                if (!_audio.isLoaded(s)) {
-                                  try {
-                                    await _audio.loadAsset(
-                                      s,
-                                      path,
-                                      volume: _volumes[s] ?? 0.6,
-                                    );
-                                  } catch (_) {
-                                    // ignore missing assets for now
-                                  }
-                                }
-                                await _audio.play(s);
-                              }
-                              setState(() {
-                                _playing = true;
-                              });
-                            } else {
-                              await _audio.stopAll();
-                              setState(() {
-                                _playing = false;
-                              });
-                            }
-                          },
-                    child: Text(
-                      _playing ? 'Stop Ambient Mix' : 'Play Ambient Mix',
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await _audio.stopAll();
-                      setState(() {
-                        _playing = false;
-                      });
-                    },
-                    child: const Text('Stop All'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              ..._suggestions.map(
-                (s) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    Text(s),
-                    Slider(
-                      value: _volumes[s] ?? 0.0,
-                      min: 0.0,
-                      max: 1.0,
-                      divisions: 20,
-                      onChanged: (v) async {
-                        setState(() {
-                          _volumes[s] = v;
-                        });
-                        if (_audio.isLoaded(s)) {
-                          await _audio.setVolume(s, v);
-                        }
-                      },
+                    Switch(
+                      value: _settings.enabled,
+                      onChanged: (v) => setState(
+                        () => _settings = _settings.copyWith(enabled: v),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      _settings.enabled
+                          ? 'Weather-based Song Mode: ON'
+                          : 'Weather-based Song Mode: OFF',
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      icon: const Icon(Icons.settings),
+                      tooltip: 'Customize',
+                      onPressed: () => _showCustomizationPanel(context),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ],
-        ),
+                const Divider(),
+                ElevatedButton(
+                  onPressed: _load,
+                  child: const Text('Get current weather'),
+                ),
+                const SizedBox(height: 16),
+                if (_loading) const Center(child: CircularProgressIndicator()),
+                if (_error != null)
+                  Text(
+                    'Error: $_error',
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                if (_weather != null) ...[
+                  if (_lastUpdated != null)
+                    Text(
+                      'Last updated: ${_lastUpdated!.toLocal()} ($_dataSource)',
+                    ),
+                  if (_lastUpdated == null) Text('Source: $_dataSource'),
+                  Text('Temperature: ${_weather!.temp} °C'),
+                  Text('Humidity: ${_weather!.humidity}%'),
+                  Text('Wind speed: ${_weather!.windSpeed} m/s'),
+                  Text('Cloudiness: ${_weather!.cloudiness}%'),
+                  Text('Description: ${_weather!.description}'),
+                  Text('Precipitation (mm): ${_weather!.precipitation ?? 0}'),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Comfort index: ${ClimateIndices.comfortIndex(_weather!.temp, _weather!.humidity, _weather!.windSpeed)}',
+                  ),
+                  const SizedBox(height: 8),
+                  Text('Suggested ambient sounds:'),
+                  const SizedBox(height: 6),
+                  Wrap(
+                    spacing: 8,
+                    children: _suggestions
+                        .map((s) => Chip(label: Text(s)))
+                        .toList(),
+                  ),
+                  const SizedBox(height: 12),
+                  if (_currentRecommendation?.songMetadata != null) ...[
+                    const Divider(),
+                    const Text(
+                      'Recommended Song:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    ListTile(
+                      leading: const Icon(Icons.music_note, color: Colors.blue),
+                      title: Text(_currentRecommendation!.songMetadata!.title),
+                      subtitle: Text(
+                        _currentRecommendation!.songMetadata!.artist,
+                      ),
+                      trailing: Wrap(
+                        spacing: 4,
+                        children: _currentRecommendation!.songMetadata!.genres
+                            .map(
+                              (g) => Chip(
+                                label: Text(
+                                  g,
+                                  style: const TextStyle(fontSize: 10),
+                                ),
+                                padding: EdgeInsets.zero,
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        final meta = _currentRecommendation!.songMetadata!;
+                        if (!_audio.isLoaded(meta.id)) {
+                          await _audio.loadAsset(
+                            meta.id,
+                            meta.assetPath,
+                            volume: _currentRecommendation!.volume,
+                          );
+                        }
+                        await _audio.setSpeed(
+                          meta.id,
+                          _currentRecommendation!.speed,
+                        );
+                        await _audio.play(meta.id);
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Playing ${meta.title}...')),
+                          );
+                        }
+                      },
+                      icon: const Icon(Icons.play_arrow),
+                      label: const Text('Play Recommended'),
+                    ),
+                    const Divider(),
+                  ],
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: _suggestions.isEmpty
+                            ? null
+                            : () async {
+                                if (!_playing) {
+                                  // load assets for suggestions (user should place matching files in assets/audio/)
+                                  for (final s in _suggestions) {
+                                    final path = 'assets/audio/$s.mp3';
+                                    if (!_audio.isLoaded(s)) {
+                                      try {
+                                        await _audio.loadAsset(
+                                          s,
+                                          path,
+                                          volume: _volumes[s] ?? 0.6,
+                                        );
+                                      } catch (_) {
+                                        // ignore missing assets for now
+                                      }
+                                    }
+                                    await _audio.play(s);
+                                  }
+                                  setState(() {
+                                    _playing = true;
+                                  });
+                                } else {
+                                  await _audio.stopAll();
+                                  setState(() {
+                                    _playing = false;
+                                  });
+                                }
+                              },
+                        child: Text(
+                          _playing ? 'Stop Ambient Mix' : 'Play Ambient Mix',
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      ElevatedButton(
+                        onPressed: () async {
+                          await _audio.stopAll();
+                          setState(() {
+                            _playing = false;
+                          });
+                        },
+                        child: const Text('Stop All'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  ..._suggestions.map(
+                    (s) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(s),
+                        Slider(
+                          value: _volumes[s] ?? 0.0,
+                          min: 0.0,
+                          max: 1.0,
+                          divisions: 20,
+                          onChanged: (v) async {
+                            setState(() {
+                              _volumes[s] = v;
+                            });
+                            if (_audio.isLoaded(s)) {
+                              await _audio.setVolume(s, v);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const ClimoraBottomNav(currentRoute: '/weather'),
+        ],
       ),
     );
   }

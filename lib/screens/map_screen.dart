@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../widgets/climora_bottom_nav.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MapScreen extends StatelessWidget {
@@ -52,13 +53,7 @@ class MapScreen extends StatelessWidget {
                 ),
 
                 // Bottom Navigation Bar
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: _BottomNavBar(
-                    primaryColor: primaryColor,
-                    backgroundDark: backgroundDark,
-                  ),
-                ),
+                const ClimoraBottomNav(currentRoute: '/map'),
               ],
             ),
           ),
@@ -397,7 +392,7 @@ class _RecCard extends StatelessWidget {
     return Container(
       width: 280,
       decoration: BoxDecoration(
-        color: backgroundDark.withValues(alpha: 0.7),
+        color: Colors.black.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
       ),
@@ -489,92 +484,6 @@ class _RecCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _BottomNavBar extends StatelessWidget {
-  final Color primaryColor;
-  final Color backgroundDark;
-  const _BottomNavBar({
-    required this.primaryColor,
-    required this.backgroundDark,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(40),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-        child: Container(
-          height: 64,
-          decoration: BoxDecoration(
-            color: backgroundDark.withValues(alpha: 0.7),
-            borderRadius: BorderRadius.circular(40),
-            border: Border.all(color: primaryColor.withValues(alpha: 0.2)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _NavIcon(
-                icon: Icons.map,
-                label: 'Map',
-                isActive: true,
-                primaryColor: primaryColor,
-              ),
-              _NavIcon(
-                icon: Icons.thermostat,
-                label: 'Climate',
-                primaryColor: primaryColor,
-              ),
-              _NavIcon(
-                icon: Icons.psychology,
-                label: 'Mood',
-                primaryColor: primaryColor,
-              ),
-              _NavIcon(
-                icon: Icons.account_circle,
-                label: 'Profile',
-                primaryColor: primaryColor,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _NavIcon extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isActive;
-  final Color primaryColor;
-
-  const _NavIcon({
-    required this.icon,
-    required this.label,
-    this.isActive = false,
-    required this.primaryColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final color = isActive ? primaryColor : Colors.grey;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: color, size: 24),
-        Text(
-          label.toUpperCase(),
-          style: TextStyle(
-            fontSize: 8,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
-      ],
     );
   }
 }

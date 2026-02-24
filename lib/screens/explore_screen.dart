@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../widgets/climora_bottom_nav.dart';
 
 class ExploreScreen extends StatelessWidget {
   const ExploreScreen({super.key});
@@ -144,7 +145,8 @@ class ExploreScreen extends StatelessWidget {
           ),
 
           // Glass Bottom Navigation Bar
-          _BottomNavBar(
+          const ClimoraBottomNav(
+            currentRoute: '/explore',
             primaryColor: primaryColor,
             backgroundDark: backgroundDark,
           ),
@@ -552,109 +554,6 @@ class _ExploreCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _BottomNavBar extends StatelessWidget {
-  final Color primaryColor;
-  final Color backgroundDark;
-  const _BottomNavBar({
-    required this.primaryColor,
-    required this.backgroundDark,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 24,
-      left: 16,
-      right: 16,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(40),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          child: Container(
-            height: 80,
-            decoration: BoxDecoration(
-              color: const Color(0xFF002B2B).withValues(alpha: 0.6),
-              borderRadius: BorderRadius.circular(40),
-              border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                GestureDetector(
-                  onTap: () => Navigator.pushReplacementNamed(context, '/home'),
-                  child: _NavButton(
-                    icon: Icons.home_outlined,
-                    label: 'Home',
-                    primaryColor: primaryColor,
-                  ),
-                ),
-                _NavButton(
-                  icon: Icons.explore,
-                  label: 'Explore',
-                  isActive: true,
-                  primaryColor: primaryColor,
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/map'),
-                  child: _NavButton(
-                    icon: Icons.map_outlined,
-                    label: 'Map',
-                    primaryColor: primaryColor,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/profile'),
-                  child: _NavButton(
-                    icon: Icons.person_outline,
-                    label: 'Profile',
-                    primaryColor: primaryColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _NavButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isActive;
-  final Color primaryColor;
-
-  const _NavButton({
-    required this.icon,
-    required this.label,
-    this.isActive = false,
-    required this.primaryColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final color = isActive ? primaryColor : Colors.grey;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, size: 28, color: color),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: GoogleFonts.spaceGrotesk(
-            textStyle: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

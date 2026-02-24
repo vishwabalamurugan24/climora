@@ -1,6 +1,6 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../widgets/climora_bottom_nav.dart';
 
 class PlayerScreen extends StatelessWidget {
   const PlayerScreen({super.key});
@@ -114,7 +114,11 @@ class PlayerScreen extends StatelessWidget {
           ),
 
           // Glass Bottom Nav Bar
-          _BottomNavBar(primaryColor: primaryColor),
+          const ClimoraBottomNav(
+            currentRoute: '/player',
+            primaryColor: primaryColor,
+            backgroundDark: backgroundDark,
+          ),
         ],
       ),
     );
@@ -445,88 +449,6 @@ class _AIModeChip extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _BottomNavBar extends StatelessWidget {
-  final Color primaryColor;
-  const _BottomNavBar({required this.primaryColor});
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 24,
-      left: 16,
-      right: 16,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-          child: Container(
-            height: 72,
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _NavBarItem(
-                  icon: Icons.home_filled,
-                  isActive: true,
-                  primaryColor: primaryColor,
-                  onTap: () => Navigator.pushReplacementNamed(context, '/home'),
-                ),
-                _NavBarItem(
-                  icon: Icons.search,
-                  primaryColor: primaryColor,
-                  onTap: () {},
-                ),
-                _NavBarItem(
-                  icon: Icons.library_music,
-                  primaryColor: primaryColor,
-                  onTap: () =>
-                      Navigator.pushReplacementNamed(context, '/playlist'),
-                ),
-                _NavBarItem(
-                  icon: Icons.settings,
-                  primaryColor: primaryColor,
-                  onTap: () =>
-                      Navigator.pushReplacementNamed(context, '/profile'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _NavBarItem extends StatelessWidget {
-  final IconData icon;
-  final bool isActive;
-  final Color primaryColor;
-  final VoidCallback onTap;
-
-  const _NavBarItem({
-    required this.icon,
-    this.isActive = false,
-    required this.primaryColor,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Icon(
-        icon,
-        color: isActive ? primaryColor : Colors.grey.withValues(alpha: 0.6),
-        size: 28,
       ),
     );
   }

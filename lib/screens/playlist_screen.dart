@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../widgets/climora_bottom_nav.dart';
 
 class PlaylistScreen extends StatelessWidget {
   const PlaylistScreen({super.key});
@@ -146,10 +147,7 @@ class PlaylistScreen extends StatelessWidget {
           ),
 
           // Bottom Bar
-          _BottomNavBar(
-            primaryColor: primaryColor,
-            backgroundDark: backgroundDark,
-          ),
+          const ClimoraBottomNav(currentRoute: '/playlist'),
         ],
       ),
     );
@@ -487,97 +485,6 @@ class _TrackItem extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _BottomNavBar extends StatelessWidget {
-  final Color primaryColor;
-  final Color backgroundDark;
-  const _BottomNavBar({
-    required this.primaryColor,
-    required this.backgroundDark,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 24,
-      left: 16,
-      right: 16,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(40),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          child: Container(
-            height: 64,
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.03),
-              borderRadius: BorderRadius.circular(40),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _NavButton(
-                  icon: Icons.home_outlined,
-                  label: 'Home',
-                  primaryColor: primaryColor,
-                ),
-                _NavButton(
-                  icon: Icons.cloud_outlined,
-                  label: 'Climate',
-                  primaryColor: primaryColor,
-                ),
-                _NavButton(
-                  icon: Icons.library_music,
-                  label: 'Library',
-                  isActive: true,
-                  primaryColor: primaryColor,
-                ),
-                _NavButton(
-                  icon: Icons.person_outline,
-                  label: 'Profile',
-                  primaryColor: primaryColor,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _NavButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isActive;
-  final Color primaryColor;
-
-  const _NavButton({
-    required this.icon,
-    required this.label,
-    this.isActive = false,
-    required this.primaryColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final color = isActive ? primaryColor : Colors.grey;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, size: 28, color: color),
-        Text(
-          label.toUpperCase(),
-          style: TextStyle(
-            fontSize: 8,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
-      ],
     );
   }
 }

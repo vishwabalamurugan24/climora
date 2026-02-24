@@ -55,21 +55,19 @@ class _AssistantOverlayState extends State<AssistantOverlay>
         widget.child,
         if (_status != AssistantStatus.idle)
           Positioned(
-            bottom: 100,
-            left: 20,
-            right: 20,
-            child: _buildOverlayUI(),
+            bottom: 40,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: _buildOverlayUI(),
+                ),
+              ),
+            ),
           ),
-
-        // Hidden trigger for demo purposes (Top right corner)
-        Positioned(
-          top: 0,
-          right: 0,
-          child: GestureDetector(
-            onLongPress: () => _service.simulateWakeWord(),
-            child: Container(width: 50, height: 50, color: Colors.transparent),
-          ),
-        ),
       ],
     );
   }
@@ -89,7 +87,7 @@ class _AssistantOverlayState extends State<AssistantOverlay>
     return ClipRRect(
       borderRadius: BorderRadius.circular(24),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(

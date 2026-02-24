@@ -1,6 +1,6 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../widgets/climora_bottom_nav.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -42,11 +42,8 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
 
-          // Floating Navigation Bar
-          _FloatingNavBar(
-            primaryColor: primaryColor,
-            backgroundDark: backgroundDark,
-          ),
+          // Glass Floating Navigation Bar
+          const ClimoraBottomNav(currentRoute: '/profile'),
         ],
       ),
     );
@@ -438,6 +435,7 @@ class _ClimateSyncTile extends StatelessWidget {
             ),
             child: Row(
               children: [
+                // This _NavButton is part of _ClimateSyncTile, not the removed _FloatingNavBar
                 _NavButton(
                   icon: Icons.add_chart_outlined,
                   label: 'Insights',
@@ -666,123 +664,33 @@ class _SubscriptionTile extends StatelessWidget {
   }
 }
 
-class _FloatingNavBar extends StatelessWidget {
-  final Color primaryColor;
-  final Color backgroundDark;
-  const _FloatingNavBar({
-    required this.primaryColor,
-    required this.backgroundDark,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 24,
-      left: 16,
-      right: 16,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-          child: Container(
-            height: 80,
-            decoration: BoxDecoration(
-              color: const Color(0xFF002B2B).withValues(alpha: 0.7),
-              borderRadius: BorderRadius.circular(16),
-              border: Border(
-                top: BorderSide(color: primaryColor.withValues(alpha: 0.15)),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                GestureDetector(
-                  onTap: () => Navigator.pushReplacementNamed(context, '/'),
-                  child: _NavButton(
-                    icon: Icons.home_outlined,
-                    label: 'Home',
-                    primaryColor: primaryColor,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () =>
-                      Navigator.pushReplacementNamed(context, '/explore'),
-                  child: _NavButton(
-                    icon: Icons.add_chart_outlined,
-                    label: 'Insights',
-                    primaryColor: primaryColor,
-                  ),
-                ),
-                _NavButton(
-                  icon: Icons.settings,
-                  label: 'Settings',
-                  isActive: true,
-                  primaryColor: primaryColor,
-                ),
-                _NavButton(
-                  icon: Icons.notifications_none,
-                  label: 'Alerts',
-                  primaryColor: primaryColor,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _NavButton extends StatelessWidget {
   final IconData icon;
   final String label;
-  final bool isActive;
   final Color primaryColor;
 
   const _NavButton({
     required this.icon,
     required this.label,
-    this.isActive = false,
     required this.primaryColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    final color = isActive ? primaryColor : Colors.grey;
+    const color = Colors.grey;
     return Column(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Stack(
-          alignment: Alignment.topRight,
-          children: [
-            Icon(icon, size: 28, color: color),
-            if (isActive)
-              Container(
-                margin: const EdgeInsets.only(top: 2, right: 2),
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: primaryColor,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: primaryColor.withValues(alpha: 0.5),
-                      blurRadius: 4,
-                    ),
-                  ],
-                ),
-              ),
-          ],
-        ),
+        Icon(icon, size: 24, color: color),
         const SizedBox(height: 4),
         Text(
           label.toUpperCase(),
           style: GoogleFonts.spaceGrotesk(
             textStyle: TextStyle(
-              fontSize: 10,
-              fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+              fontSize: 8,
+              fontWeight: FontWeight.bold,
               color: color,
-              letterSpacing: -0.5,
             ),
           ),
         ),

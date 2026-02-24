@@ -54,11 +54,12 @@ class AppTheme {
     );
   }
 
-  static Widget glassBox({required Widget child, double blur = 15.0}) {
+  static Widget glassBox({required Widget child, double blur = 8.0}) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(24),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+
         child: Container(
           decoration: BoxDecoration(
             color: surfaceGlass,

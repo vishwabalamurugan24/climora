@@ -1,9 +1,69 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:math' as math;
+import '../widgets/climora_bottom_nav.dart';
+import '../presentation/widgets/voice_orb.dart';
+import 'desktop_home_view.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  bool _isListening = false;
+  double _voiceVolume = 0.0;
+
+  @override
+  Widget build(BuildContext context) {
+    const primaryColor = Color(0xFFC2B180);
+    const backgroundDark = Color(0xFF0A1F1F);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth > 1100) {
+          return DesktopHomeView(
+            primaryColor: primaryColor,
+            backgroundDark: backgroundDark,
+          );
+        }
+        return _MobileHomeView(
+          isListening: _isListening,
+          voiceVolume: _voiceVolume,
+          onVoiceToggle: () {
+            setState(() => _isListening = !_isListening);
+            if (_isListening) _simulateVoice();
+          },
+        );
+      },
+    );
+  }
+
+  void _simulateVoice() async {
+    while (_isListening) {
+      if (!mounted) break;
+      setState(() => _voiceVolume = math.Random().nextDouble());
+      await Future.delayed(const Duration(milliseconds: 300));
+    }
+    if (mounted) {
+      setState(() => _voiceVolume = 0.0);
+    }
+  }
+}
+
+class _MobileHomeView extends StatelessWidget {
+  final bool isListening;
+  final double voiceVolume;
+  final VoidCallback onVoiceToggle;
+
+  const _MobileHomeView({
+    required this.isListening,
+    required this.voiceVolume,
+    required this.onVoiceToggle,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,20 +96,49 @@ class HomeScreen extends StatelessWidget {
                   // Top Section: Greeting & Weather Dashboard
                   const _HeaderSection(primaryColor: primaryColor),
 
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24.0),
-                    child: _WeatherDashboard(primaryColor: primaryColor),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: GestureDetector(
+                      onTap: () => Navigator.pushNamed(context, '/weather'),
+                      child: const _WeatherDashboard(
+                        primaryColor: primaryColor,
+                      ),
+                    ),
                   ),
-
                   const SizedBox(height: 32),
 
                   // Mood Symphony Section
-                  const _MoodSymphonySection(primaryColor: primaryColor),
+                  _MoodSymphonySection(primaryColor: primaryColor),
 
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 40),
+
+                  // Central Voice Activation Orb
+                  GestureDetector(
+                    onTap: onVoiceToggle,
+                    child: VoiceOrb(
+                      isListening: isListening,
+                      volume: voiceVolume,
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+                  Center(
+                    child: Text(
+                      isListening
+                          ? "Listening to your vibe..."
+                          : "What's your vibe today?",
+                      style: GoogleFonts.spaceGrotesk(
+                        color: Colors.white60,
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 40),
 
                   // Climate Recommendations Section
-                  const _ClimateRecommendationsSection(
+                  _ClimateRecommendationsSection(
                     primaryColor: primaryColor,
                     backgroundDark: backgroundDark,
                   ),
@@ -59,7 +148,8 @@ class HomeScreen extends StatelessWidget {
           ),
 
           // Bottom Nav Bar
-          _BottomNavBar(
+          ClimoraBottomNav(
+            currentRoute: '/home',
             primaryColor: primaryColor,
             backgroundDark: backgroundDark,
           ),
@@ -155,7 +245,8 @@ class _WeatherDashboard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -280,29 +371,41 @@ class _MoodSymphonySection extends StatelessWidget {
             crossAxisSpacing: 16,
             childAspectRatio: 1,
             children: [
-              _MoodCard(
-                icon: Icons.wb_sunny_outlined,
-                title: 'Happy',
-                subtitle: 'UPLIFTING BEATS',
-                primaryColor: primaryColor,
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/playlist'),
+                child: _MoodCard(
+                  icon: Icons.wb_sunny_outlined,
+                  title: 'Happy',
+                  subtitle: 'UPLIFTING BEATS',
+                  primaryColor: primaryColor,
+                ),
               ),
-              _MoodCard(
-                icon: Icons.filter_drama_outlined,
-                title: 'Calm',
-                subtitle: 'AMBIENT ECHOES',
-                primaryColor: primaryColor,
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/playlist'),
+                child: _MoodCard(
+                  icon: Icons.filter_drama_outlined,
+                  title: 'Calm',
+                  subtitle: 'AMBIENT ECHOES',
+                  primaryColor: primaryColor,
+                ),
               ),
-              _MoodCard(
-                icon: Icons.water_drop_outlined,
-                title: 'Sad',
-                subtitle: 'MELODIC RAIN',
-                primaryColor: primaryColor,
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/playlist'),
+                child: _MoodCard(
+                  icon: Icons.water_drop_outlined,
+                  title: 'Sad',
+                  subtitle: 'MELODIC RAIN',
+                  primaryColor: primaryColor,
+                ),
               ),
-              _MoodCard(
-                icon: Icons.grain,
-                title: 'Focus',
-                subtitle: 'LO-FI TEXTURES',
-                primaryColor: primaryColor,
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/playlist'),
+                child: _MoodCard(
+                  icon: Icons.grain,
+                  title: 'Focus',
+                  subtitle: 'LO-FI TEXTURES',
+                  primaryColor: primaryColor,
+                ),
               ),
             ],
           ),
@@ -330,7 +433,8 @@ class _MoodCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -419,32 +523,42 @@ class _ClimateRecommendationsSection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 24),
             children: [
-              _RecommendationCard(
-                imageUrl:
-                    'https://lh3.googleusercontent.com/aida-public/AB6AXuAYUe8pbrohNZ5pSXqlwYxa3N8lEqwRp9ZJW2nIOSI_ZbmAUZNGpAYP1ZD5mbdceHd1mM0C1H13bLECTNpd9VJy129AtaMLVInb3xYj078q73v5HPKiSnXuIPG95AIuJ8XTE5282MvSqS-gmK2_p-MGR3Ll0pRXmM5ayOf7oqYjhAIjFy8uqkThUvyupv-u7vtu9wgPXfUDefeFhJySd1z9elyvRWAVyPYRmAWdmjWFVz4KPYLfsZwLEtMIOcF0tvA73APWmCGqZghm',
-                title: 'Rainy Evening',
-                description:
-                    'Deep melancholic piano and atmospheric rain sounds.',
-                weatherTag: 'Matched to current weather',
-                weatherIcon: Icons.cloudy_snowing,
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/player'),
+                child: _RecommendationCard(
+                  imageUrl:
+                      'https://lh3.googleusercontent.com/aida-public/AB6AXuAYUe8pbrohNZ5pSXqlwYxa3N8lEqwRp9ZJW2nIOSI_ZbmAUZNGpAYP1ZD5mbdceHd1mM0C1H13bLECTNpd9VJy129AtaMLVInb3xYj078q73v5HPKiSnXuIPG95AIuJ8XTE5282MvSqS-gmK2_p-MGR3Ll0pRXmM5ayOf7oqYjhAIjFy8uqkThUvyupv-u7vtu9wgPXfUDefeFhJySd1z9elyvRWAVyPYRmAWdmjWFVz4KPYLfsZwLEtMIOcF0tvA73APWmCGqZghm',
+                  title: 'Rainy Evening',
+                  description:
+                      'Deep melancholic piano and atmospheric rain sounds.',
+                  weatherTag: 'Matched to current weather',
+                  weatherIcon: Icons.cloudy_snowing,
+                ),
               ),
               const SizedBox(width: 16),
-              _RecommendationCard(
-                imageUrl:
-                    'https://lh3.googleusercontent.com/aida-public/AB6AXuDhQsl8_1oxHKDzSVRiQ6PxSkeX4VC_nkI-Mt_Z0XLjk2AqRGvhfBVS5bxFh8gi16H0R-M1WGRFpcBRA6GbNygJmhRyc6Kk3ENfIf45LSQbb4dVAXLpfhWNQ-1nRZDtpUqiomO4FMX6W2gR2PJZyFtllE2g4zfRAKJ4qyqYukiqcAj1mPbEt4t88O-I-vgJYsDusFmwxigF22QKhTEdpY_lldy0hKfgaBlRNmPNFeTtiF330FAK3C6Qs-0A5w8d8I9JISUUktKL24w_',
-                title: 'Sunny Morning Energy',
-                description: 'Bright rhythmic acoustic and upbeat indie folk.',
-                weatherTag: 'Forecast: Morning Energy',
-                weatherIcon: Icons.sunny,
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/player'),
+                child: _RecommendationCard(
+                  imageUrl:
+                      'https://lh3.googleusercontent.com/aida-public/AB6AXuDhQsl8_1oxHKDzSVRiQ6PxSkeX4VC_nkI-Mt_Z0XLjk2AqRGvhfBVS5bxFh8gi16H0R-M1WGRFpcBRA6GbNygJmhRyc6Kk3ENfIf45LSQbb4dVAXLpfhWNQ-1nRZDtpUqiomO4FMX6W2gR2PJZyFtllE2g4zfRAKJ4qyqYukiqcAj1mPbEt4t88O-I-vgJYsDusFmwxigF22QKhTEdpY_lldy0hKfgaBlRNmPNFeTtiF330FAK3C6Qs-0A5w8d8I9JISUUktKL24w_',
+                  title: 'Sunny Morning Energy',
+                  description:
+                      'Bright rhythmic acoustic and upbeat indie folk.',
+                  weatherTag: 'Forecast: Morning Energy',
+                  weatherIcon: Icons.sunny,
+                ),
               ),
               const SizedBox(width: 16),
-              _RecommendationCard(
-                imageUrl:
-                    'https://lh3.googleusercontent.com/aida-public/AB6AXuDdbIKktNjwklIrVdg_yZvPiVQqLrsdRl4CgMslLhwuPR_Y6s8DMyI_Pzoh_Sj4O6YkFVMj9UGBBSh-Xb2VfTfHBievFVa49RWk7_m5iM0Tn61tMS4EwXO7-sWLQPmcyDLrkpsxuLsiFjuPDjiHlnD1A9TEFeERSAWUuEwlq13b3VTXMr64YIWxWmifYH2cQcFHJTCxKLyu8syRlwo7hWq5ikQYAbRSzvJqno-mk148SCUW3El-0mz6LesGykPNHGEeQ7pUajPUVmAp',
-                title: 'Arctic Chill',
-                description: 'Crystalline synth pads and minimal techno.',
-                weatherTag: 'Cooling Selection',
-                weatherIcon: Icons.ac_unit,
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/player'),
+                child: _RecommendationCard(
+                  imageUrl:
+                      'https://lh3.googleusercontent.com/aida-public/AB6AXuDdbIKktNjwklIrVdg_yZvPiVQqLrsdRl4CgMslLhwuPR_Y6s8DMyI_Pzoh_Sj4O6YkFVMj9UGBBSh-Xb2VfTfHBievFVa49RWk7_m5iM0Tn61tMS4EwXO7-sWLQPmcyDLrkpsxuLsiFjuPDjiHlnD1A9TEFeERSAWUuEwlq13b3VTXMr64YIWxWmifYH2cQcFHJTCxKLyu8syRlwo7hWq5ikQYAbRSzvJqno-mk148SCUW3El-0mz6LesGykPNHGEeQ7pUajPUVmAp',
+                  title: 'Arctic Chill',
+                  description: 'Crystalline synth pads and minimal techno.',
+                  weatherTag: 'Cooling Selection',
+                  weatherIcon: Icons.ac_unit,
+                ),
               ),
             ],
           ),
@@ -558,174 +672,6 @@ class _RecommendationCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BottomNavBar extends StatelessWidget {
-  final Color primaryColor;
-  final Color backgroundDark;
-  const _BottomNavBar({
-    required this.primaryColor,
-    required this.backgroundDark,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 16,
-      left: 16,
-      right: 16,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(40),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          child: Container(
-            height: 80,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.4),
-              borderRadius: BorderRadius.circular(40),
-              border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                GestureDetector(
-                  onTap: () => Navigator.pushReplacementNamed(context, '/home'),
-                  child: _NavItem(
-                    icon: Icons.home,
-                    label: 'Home',
-                    isActive: true,
-                    primaryColor: primaryColor,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/player'),
-                  child: _NavItem(
-                    icon: Icons.play_circle,
-                    label: 'Player',
-                    primaryColor: primaryColor,
-                  ),
-                ),
-                _NavCenterItem(
-                  primaryColor: primaryColor,
-                  backgroundDark: backgroundDark,
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/map'),
-                  child: _NavItem(
-                    icon: Icons.map,
-                    label: 'Map',
-                    primaryColor: primaryColor,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, '/explore'),
-                  child: _NavItem(
-                    icon: Icons.explore,
-                    label: 'Explore',
-                    primaryColor: primaryColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _NavItem extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isActive;
-  final Color primaryColor;
-
-  const _NavItem({
-    required this.icon,
-    required this.label,
-    this.isActive = false,
-    required this.primaryColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final color = isActive ? primaryColor : Colors.grey;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, size: 28, color: color),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: GoogleFonts.spaceGrotesk(
-            textStyle: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-              color: color,
-              letterSpacing: 1,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _NavCenterItem extends StatelessWidget {
-  final Color primaryColor;
-  final Color backgroundDark;
-  const _NavCenterItem({
-    required this.primaryColor,
-    required this.backgroundDark,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/player'),
-      child: Stack(
-        alignment: Alignment.center,
-        clipBehavior: Clip.none,
-        children: [
-          Positioned(
-            top: -20,
-            child: Container(
-              height: 56,
-              width: 56,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: primaryColor.withValues(alpha: 0.3),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                child: Container(color: Colors.transparent),
-              ),
-            ),
-          ),
-          Positioned(
-            top: -20,
-            child: Container(
-              height: 56,
-              width: 56,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: primaryColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Icon(Icons.bolt, size: 30, color: backgroundDark),
             ),
           ),
         ],

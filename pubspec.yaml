@@ -31,7 +31,14 @@ dependencies:
   path: ^1.9.1
   file_picker: ^10.3.10
   url_launcher: ^6.3.1
-  google_fonts: ^6.1.0
+  google_fonts: ^8.0.2
+
+dependency_overrides:
+  meta: ^1.18.1
+  win32: ^6.0.0
+  unicode: ^1.1.9
+  proj4dart: ^3.0.0
+  mgrs_dart: ^3.0.0
 
 dev_dependencies:
   flutter_test:
