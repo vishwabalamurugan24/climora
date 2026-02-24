@@ -1,10 +1,34 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import '../widgets/climora_bottom_nav.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../widgets/climora_bottom_nav.dart';
+import '../presentation/widgets/map_pathway_painter.dart';
 
-class MapScreen extends StatelessWidget {
+class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
+
+  @override
+  State<MapScreen> createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _pulseController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,56 +39,256 @@ class MapScreen extends StatelessWidget {
       backgroundColor: backgroundDark,
       body: Stack(
         children: [
-          // Full Screen Map Background
+          // Dark Map Background with Radial Gradient
           Positioned.fill(
-            child: Image.network(
-              'https://lh3.googleusercontent.com/aida-public/AB6AXuAAQSk4YQBvHSNMEjVckjMuHSVnE78eAX3Wi8av3kNbOrCaApNcx51zQ6CRLBaiOjU3ukmAQrglvesvZwJgbtD9nzV2SakZHk2t9jViyg5KwKDxFgEWhggbj59yGpFecITtiGsOipcU4zu5GSylDtXk4aOlVArKLgsiAw2OjIYim_xOEXGRYkzymiOrUWiyx20WTX9jGGwRfr71mYNMntnHz9KIhfXTc1pOpyi2I_DetzTe_8zN3cJjdKVZs5K1Nes8w43c4xs3067y',
-              fit: BoxFit.cover,
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: RadialGradient(
+                  center: Alignment.center,
+                  radius: 1.5,
+                  colors: [Color(0xFF1E293B), Color(0xFF0F171A)],
+                ),
+              ),
             ),
           ),
+
+          // Glowing Pathways Custom Paint
           Positioned.fill(
-            child: Container(color: Colors.black.withValues(alpha: 0.4)),
+            child: AnimatedBuilder(
+              animation: _pulseController,
+              builder: (context, child) {
+                return CustomPaint(
+                  painter: MapPathwayPainter(
+                    pulseValue: _pulseController.value,
+                  ),
+                );
+              },
+            ),
           ),
 
+          // UI Overlay
           SafeArea(
             child: Column(
               children: [
-                // Top Header Panel
+                // Header
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: _ClimateStatusPanel(
-                    primaryColor: primaryColor,
-                    backgroundDark: backgroundDark,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 32,
+                            height: 32,
+                            decoration: const BoxDecoration(
+                              color: primaryColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.cyclone,
+                              color: backgroundDark,
+                              size: 18,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Climora AI',
+                            style: GoogleFonts.spaceGrotesk(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      _GlassIconButton(
+                        icon: Icons.search,
+                        onTap: () {},
+                        primaryColor: primaryColor,
+                      ),
+                    ],
                   ),
                 ),
 
-                // Search Bar Overlay
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: _SearchBarOverlay(primaryColor: primaryColor),
+                // Season Status Panel
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: _GlassPanel(
+                    primaryColor: primaryColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'CURRENT SEASON',
+                              style: GoogleFonts.spaceGrotesk(
+                                color: primaryColor,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 2,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              'Summer Season',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'LOCAL CLIMATE',
+                              style: GoogleFonts.spaceGrotesk(
+                                color: Colors.white38,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 2,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              'High Humidity • 82°F',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
 
                 const Spacer(),
 
-                // Smart Recommendations Carousel
-                const _SmartRecommendationsCarousel(
-                  primaryColor: primaryColor,
-                  backgroundDark: backgroundDark,
+                // Recommendations Section
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 24.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Mood-Matched Recommendations',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'View All',
+                              style: TextStyle(
+                                color: primaryColor,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 180,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          children: [
+                            _RecCard(
+                              imageUrl:
+                                  'https://lh3.googleusercontent.com/aida-public/AB6AXuCSF2KuYvzImdWDfIaQMJynmOVZF5sbVTztMKvVIKwpFyTj3AxoxBWOiVIVXLoUwNpRPYqD6inV-2Dss4F2vnek4SvjRpBLhrVGufYjbC_rb7KUrlUVYNI7H62Sqz_mmB6ZS7NFMU_kD-AVnv-DySkEnw4kjnU_C49myawVDJBpfFj9ZZ-SRYzU2mi0NrRV3u2P8U-Qiq1yWim3_zWGEZxTZGu2j8DO5H6TBKhTHDSaTKN6LHJIve0xX_ZCfk8BbEsXeboWlrqx5xgc',
+                              title: 'The Blue Nook',
+                              subtitle: 'Bookstore • 0.5mi',
+                              tag: 'CALM',
+                              primaryColor: primaryColor,
+                            ),
+                            const SizedBox(width: 12),
+                            _RecCard(
+                              imageUrl:
+                                  'https://lh3.googleusercontent.com/aida-public/AB6AXuA9oZU_n3TxzSX8FlOGGOyQ7W0vvrJToTWz5fN6HJLkzKxy8UgIYJlR9JB2i82KNpLJvoA1F9R1BmMVc7Bh0P6da70demoBnMF_gfm6MgGOgrZcF17NEqu2vWbVGZk1zmjNsBIq5ZSLsmcnIqha17LOzL69MnqhSD3ORyTr_97PEl0rOPEKc2HULCkrScvzz4NUu52tX-cIDY6X_LTCHFGcmrl3iF2wsfTqwZ6LyXfHRAFxulV2xtvk8ASziI7tVa8Qy7FzBqQgkMpp',
+                              title: 'Misty Terrace',
+                              subtitle: 'Cafe • 1.2mi',
+                              tag: 'FOCUS',
+                              primaryColor: primaryColor,
+                            ),
+                            const SizedBox(width: 12),
+                            _RecCard(
+                              imageUrl:
+                                  'https://lh3.googleusercontent.com/aida-public/AB6AXuDFkMrYGxNSb0I2dStWTPa49DhVvlRTvaOxLpmhVvkBJKXxp-noPizuNdC9N4aRWo8ce011AqMi5B-JdjIsbOZyPdp1J3_-SSgp3iAQGuRyiQmRqQ-4XbfvSIxywQnj3AAQkl7O5ICt3XXtZCIYGb34KrPfhyxuGHDvDDtnFSzbStsosvCumHYB-OQhKwrq_1-OSZ8QlA2LNckqU_R1sYmA2-BMvVAJg2iCJMLBxeTGFvOrJhyZpO8BbOqBvcu1qQyKElFCi-viB73w',
+                              title: 'Zen Garden',
+                              subtitle: 'Park • 2.1mi',
+                              tag: 'CALM',
+                              primaryColor: primaryColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
 
-                // Bottom Navigation Bar
-                const ClimoraBottomNav(currentRoute: '/map'),
+                // Floating Bottom Nav
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
+                  child: ClimoraBottomNav(currentRoute: '/map'),
+                ),
               ],
             ),
           ),
 
-          // Map Navigation Controls
+          // Map Controls
           Positioned(
             right: 16,
-            top: MediaQuery.of(context).size.height * 0.4,
-            child: _MapControls(
-              primaryColor: primaryColor,
-              backgroundDark: backgroundDark,
+            top: MediaQuery.of(context).size.height * 0.45,
+            child: Column(
+              children: [
+                _GlassIconButton(
+                  icon: Icons.add,
+                  onTap: () {},
+                  primaryColor: primaryColor,
+                  isSquare: true,
+                ),
+                const SizedBox(height: 8),
+                _GlassIconButton(
+                  icon: Icons.remove,
+                  onTap: () {},
+                  primaryColor: primaryColor,
+                  isSquare: true,
+                ),
+                const SizedBox(height: 16),
+                _GlassIconButton(
+                  icon: Icons.near_me,
+                  onTap: () {},
+                  primaryColor: primaryColor,
+                  isSquare: true,
+                  iconColor: primaryColor,
+                ),
+              ],
+            ),
+          ),
+
+          // Back Button
+          Positioned(
+            top: 24,
+            left: 16,
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
             ),
           ),
         ],
@@ -73,303 +297,69 @@ class MapScreen extends StatelessWidget {
   }
 }
 
-class _ClimateStatusPanel extends StatelessWidget {
+class _GlassIconButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
   final Color primaryColor;
-  final Color backgroundDark;
-  const _ClimateStatusPanel({
+  final bool isSquare;
+  final Color? iconColor;
+
+  const _GlassIconButton({
+    required this.icon,
+    required this.onTap,
     required this.primaryColor,
-    required this.backgroundDark,
+    this.isSquare = false,
+    this.iconColor,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(isSquare ? 12 : 25),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+          child: Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: const Color(0xFF1D1B15).withValues(alpha: 0.7),
+              borderRadius: BorderRadius.circular(isSquare ? 12 : 25),
+              border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
+            ),
+            child: Center(
+              child: Icon(icon, color: iconColor ?? Colors.white, size: 20),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _GlassPanel extends StatelessWidget {
+  final Widget child;
+  final Color primaryColor;
+
+  const _GlassPanel({required this.child, required this.primaryColor});
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: backgroundDark.withValues(alpha: 0.7),
-            border: Border.all(color: primaryColor.withValues(alpha: 0.15)),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.chevron_left, color: primaryColor),
-                        onPressed: () =>
-                            Navigator.pushReplacementNamed(context, '/home'),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: primaryColor.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Icon(
-                          Icons.cloudy_snowing,
-                          color: primaryColor,
-                          size: 32,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'CLIMATE STATUS',
-                            style: GoogleFonts.spaceGrotesk(
-                              textStyle: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: primaryColor.withValues(alpha: 0.8),
-                                letterSpacing: 2,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            'Rainy Period',
-                            style: GoogleFonts.spaceGrotesk(
-                              textStyle: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: primaryColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.auto_awesome,
-                      color: backgroundDark,
-                      size: 20,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              const Divider(color: Colors.white10),
-              const SizedBox(height: 8),
-              Text(
-                '"The rhythmic rain suggests a cozy, indoor setting. Perfect for introspection and deep work."',
-                style: GoogleFonts.spaceGrotesk(
-                  textStyle: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.white70,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _SearchBarOverlay extends StatelessWidget {
-  final Color primaryColor;
-  const _SearchBarOverlay({required this.primaryColor});
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(40),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
             color: const Color(0xFF1D1B15).withValues(alpha: 0.7),
-            borderRadius: BorderRadius.circular(40),
-            border: Border.all(color: primaryColor.withValues(alpha: 0.2)),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
           ),
-          child: Row(
-            children: [
-              const Icon(Icons.search, color: Colors.grey, size: 20),
-              const SizedBox(width: 8),
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Find climate-perfect spots...',
-                    hintStyle: GoogleFonts.spaceGrotesk(
-                      color: Colors.grey,
-                      fontSize: 13,
-                    ),
-                    border: InputBorder.none,
-                    isDense: true,
-                  ),
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
-                ),
-              ),
-              Icon(Icons.mic, color: primaryColor, size: 20),
-            ],
-          ),
+          child: child,
         ),
       ),
-    );
-  }
-}
-
-class _MapControls extends StatelessWidget {
-  final Color primaryColor;
-  final Color backgroundDark;
-  const _MapControls({
-    required this.primaryColor,
-    required this.backgroundDark,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _ControlBtn(
-          icon: Icons.add,
-          primaryColor: primaryColor,
-          backgroundDark: backgroundDark,
-        ),
-        const SizedBox(height: 8),
-        _ControlBtn(
-          icon: Icons.remove,
-          primaryColor: primaryColor,
-          backgroundDark: backgroundDark,
-        ),
-        const SizedBox(height: 8),
-        Container(
-          height: 44,
-          width: 44,
-          decoration: BoxDecoration(
-            color: primaryColor,
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10)],
-          ),
-          child: Icon(Icons.near_me, color: backgroundDark, size: 20),
-        ),
-      ],
-    );
-  }
-}
-
-class _ControlBtn extends StatelessWidget {
-  final IconData icon;
-  final Color primaryColor;
-  final Color backgroundDark;
-  const _ControlBtn({
-    required this.icon,
-    required this.primaryColor,
-    required this.backgroundDark,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-        child: Container(
-          height: 44,
-          width: 44,
-          decoration: BoxDecoration(
-            color: backgroundDark.withValues(alpha: 0.7),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: primaryColor.withValues(alpha: 0.15)),
-          ),
-          child: Icon(icon, color: Colors.white, size: 20),
-        ),
-      ),
-    );
-  }
-}
-
-class _SmartRecommendationsCarousel extends StatelessWidget {
-  final Color primaryColor;
-  final Color backgroundDark;
-  const _SmartRecommendationsCarousel({
-    required this.primaryColor,
-    required this.backgroundDark,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              const Text(
-                'Smart Recommendations',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              Text(
-                'VIEW ALL',
-                style: GoogleFonts.spaceGrotesk(
-                  textStyle: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: primaryColor,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 200,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            children: [
-              _RecCard(
-                imageUrl:
-                    'https://lh3.googleusercontent.com/aida-public/AB6AXuAu1ylkm2LYmY4pwDENBNMo76ta8VmijXCDerW8gYvoN4cUlbxiEUrptfuQf97VoxAOsjOy5M6zTMZG_ShNczK1GV-tONBM-zRnjZHJaflgKSLnv5M0KPV36WbC5Uto-uED89yJmu6FI_QQY_FAfRSHK2HofxN7VenOjLIEatXgQUHbAIVLw4Ot6ElR-JtefLShHQTj_xugjCoQZKCqMUU3F6rF9mDEtm5kVNLbLTZzNPaWjGbGqsmgnN-L37MmxyOfJaslalFjl7Vs',
-                title: 'The Quiet Nook',
-                subtitle: 'Artisanal Bookstore & Cafe',
-                dist: '0.4 MI',
-                tags: const ['MOOD: CALM', 'RAIN-SAFE'],
-                primaryColor: primaryColor,
-                backgroundDark: backgroundDark,
-              ),
-              const SizedBox(width: 12),
-              _RecCard(
-                imageUrl:
-                    'https://lh3.googleusercontent.com/aida-public/AB6AXuDfByPLaCmSJ6D0BtQeHVh2sgXqptCm5aEIcreQINvze8N8GIH_igtUCyxvk6KvtZlaWL9xFknlw0lGn5Di3nOikfm_yfyk8-xO00aIbbaL4QC_dMC1KGtYNxO6wSOjsXu5OVCFMRDKe1xNN1az5F_Fw5HKlPB6K-C8LBaRxIKAejtlI39SODsdczNrpQyYI5p_v2bHrBxMeGUq5_ot5UB51sfHM8JyWa2wiBmp_ogWQPgr_P5LPQOB11ur7mxyrDpNS8d-nr6tbtCB',
-                title: 'Mist & Leaf Tea',
-                subtitle: 'Herbal Infusions & Zen Space',
-                dist: '0.8 MI',
-                tags: const ['MOOD: FOCUS', 'WARMTH'],
-                primaryColor: primaryColor,
-                backgroundDark: backgroundDark,
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
@@ -378,117 +368,89 @@ class _RecCard extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String subtitle;
-  final String dist;
-  final List<String> tags;
+  final String tag;
   final Color primaryColor;
-  final Color backgroundDark;
 
   const _RecCard({
     required this.imageUrl,
     required this.title,
     required this.subtitle,
-    required this.dist,
-    required this.tags,
+    required this.tag,
     required this.primaryColor,
-    required this.backgroundDark,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 280,
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
-      ),
+      width: 240,
       clipBehavior: Clip.antiAlias,
-      child: Column(
-        children: [
-          Stack(
+      decoration: BoxDecoration(
+        color: const Color(0xFF1D1B15).withValues(alpha: 0.7),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+      ),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                imageUrl,
-                height: 100,
+              Container(
+                height: 90,
                 width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: backgroundDark.withValues(alpha: 0.6),
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(
-                      color: primaryColor.withValues(alpha: 0.3),
-                    ),
-                  ),
-                  child: Text(
-                    dist,
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: primaryColor,
-                    ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: DecorationImage(
+                    image: NetworkImage(imageUrl),
+                    fit: BoxFit.cover,
                   ),
                 ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: primaryColor.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      tag,
+                      style: TextStyle(
+                        color: primaryColor,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: const TextStyle(color: Colors.white38, fontSize: 11),
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  subtitle,
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  children: tags
-                      .map(
-                        (t) => Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: primaryColor.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: primaryColor.withValues(alpha: 0.2),
-                            ),
-                          ),
-                          child: Text(
-                            t,
-                            style: TextStyle(
-                              fontSize: 8,
-                              fontWeight: FontWeight.bold,
-                              color: primaryColor,
-                            ),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
