@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:geolocator/geolocator.dart';
 import '../widgets/climora_bottom_nav.dart';
 import '../presentation/widgets/map_pathway_painter.dart';
+import '../services/location_service.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -17,39 +19,11 @@ class _MapScreenState extends State<MapScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _pulseController;
   final MapController _mapController = MapController();
+  final LocationService _locationService = LocationService();
 
-  // Default center at Tokyo (as per your design ref)
-  final LatLng _center = const LatLng(35.6762, 139.6503);
-
-  final List<Map<String, dynamic>> _recommendations = [
-    {
-      'imageUrl':
-          'https://lh3.googleusercontent.com/aida-public/AB6AXuCSF2KuYvzImdWDfIaQMJynmOVZF5sbVTztMKvVIKwpFyTj3AxoxBWOiVIVXLoUwNpRPYqD6inV-2Dss4F2vnek4SvjRpBLhrVGufYjbC_rb7KUrlUVYNI3H62Sqz_mmB6ZS7NFMU_kD-AVnv-DySkEnw4kjnU_C49myawVDJBpfFj9ZZ-SRYzU2mi0NrRV3u2P8U-Qiq1yWim3_zWGEZxTZGu2j8DO5H6TBKhTHDSaTKN6LHJIve0xX_ZCfk8BbEsXeboWlrqx5xgc',
-      'title': 'The Blue Nook',
-      'subtitle': 'Bookstore • 0.5mi',
-      'tag': 'CALM',
-      'lat': 35.6800,
-      'lng': 139.6550,
-    },
-    {
-      'imageUrl':
-          'https://lh3.googleusercontent.com/aida-public/AB6AXuA9oZU_n3TxzSX8FlOGGOyQ7W0vvrJToTWz5fN6HJLkzKxy8UgIYJlR9JB2i82KNpLJvoA1F9R1BmMVc7Bh0P6da70demoBnMF_gfm6MgGOgrZcF17NEqu2vWbVGZk1zmjNsBIq5ZSLsmcnIqha17LOzL69MnqhSD3ORyTr_97PEl0rOPEKc2HULCkrScvzz4NUu52tX-cIDY6X_LTCHFGcmrl3iF2wsfTqwZ6LyXfHRAFxulV2xtvk8ASziI7tVa8Qy7FzBqQgkMpp',
-      'title': 'Misty Terrace',
-      'subtitle': 'Cafe • 1.2mi',
-      'tag': 'FOCUS',
-      'lat': 35.6720,
-      'lng': 139.6450,
-    },
-    {
-      'imageUrl':
-          'https://lh3.googleusercontent.com/aida-public/AB6AXuDFkMrYGxNSb0I2dStWTPa49DhVvlRTvaOxLpmhVvkBJKXxp-noPizuNdC9N4aRWo8ce011AqMi5B-JdjIsbOZyPdp1J3_-SSgp3iAQGuRyiQmRqQ-4XbfvSIxywQnj3AAQkl7O5ICt3XXtZCIYGb34KrPfhyxuGHDvDDtnFSzbStsosvCumHYB-OQhKwrq_1-OSZ8QlA2LNckqU_R1sYmA2-BMvVAJg2iCJMLBxeTGFvOrJhyZpO8BbOqBvcu1qQyKElFCi-viB73w',
-      'title': 'Zen Garden',
-      'subtitle': 'Park • 2.1mi',
-      'tag': 'CALM',
-      'lat': 35.6850,
-      'lng': 139.6400,
-    },
-  ];
+  LatLng _currentPosition = const LatLng(35.6762, 139.6503); // Default Tokyo
+  bool _isLocationLoaded = false;
+  List<Map<String, dynamic>> _recommendations = [];
 
   @override
   void initState() {
@@ -58,6 +32,54 @@ class _MapScreenState extends State<MapScreen>
       vsync: this,
       duration: const Duration(seconds: 2),
     )..repeat();
+    _initializeLocation();
+  }
+
+  Future<void> _initializeLocation() async {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return;
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) return;
+      }
+
+      if (permission == LocationPermission.deniedForever) return;
+
+      Position position = await Geolocator.getCurrentPosition();
+      final latLng = LatLng(position.latitude, position.longitude);
+
+      final spots = await _locationService.getNearbyMoodSpots(
+        lat: position.latitude,
+        lon: position.longitude,
+        targetVibe: 'any',
+      );
+
+      if (mounted) {
+        setState(() {
+          _currentPosition = latLng;
+          _isLocationLoaded = true;
+          _recommendations = spots
+              .map(
+                (s) => {
+                  'imageUrl':
+                      'https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&q=80&w=300',
+                  'title': s.name,
+                  'subtitle': '${s.category} • New Space',
+                  'tag': s.vibe.toUpperCase(),
+                  'lat': s.latitude,
+                  'lng': s.longitude,
+                },
+              )
+              .toList();
+        });
+        _mapController.move(latLng, 14.0);
+      }
+    } catch (e) {
+      debugPrint('Error getting location: $e');
+    }
   }
 
   @override
@@ -80,7 +102,7 @@ class _MapScreenState extends State<MapScreen>
             child: FlutterMap(
               mapController: _mapController,
               options: MapOptions(
-                initialCenter: _center,
+                initialCenter: _currentPosition,
                 initialZoom: 14.0,
                 backgroundColor: backgroundDark,
               ),
@@ -90,25 +112,47 @@ class _MapScreenState extends State<MapScreen>
                       'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
                   subdomains: const ['a', 'b', 'c', 'd'],
                 ),
-                MarkerLayer(
-                  markers: _recommendations.map((rec) {
-                    return Marker(
-                      point: LatLng(rec['lat'], rec['lng']),
-                      width: 60,
-                      height: 60,
-                      child: AnimatedBuilder(
-                        animation: _pulseController,
-                        builder: (context, child) {
-                          return CustomPaint(
-                            painter: MapPathwayPainter(
-                              pulseValue: _pulseController.value,
-                            ),
-                          );
-                        },
+                if (_isLocationLoaded)
+                  MarkerLayer(
+                    markers: [
+                      // User Location Marker
+                      Marker(
+                        point: _currentPosition,
+                        width: 80,
+                        height: 80,
+                        child: AnimatedBuilder(
+                          animation: _pulseController,
+                          builder: (context, child) {
+                            return CustomPaint(
+                              painter: MapPathwayPainter(
+                                pulseValue: _pulseController.value,
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    );
-                  }).toList(),
-                ),
+                      // Recommendation Markers
+                      ..._recommendations.map((rec) {
+                        return Marker(
+                          point: LatLng(rec['lat'], rec['lng']),
+                          width: 40,
+                          height: 40,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: primaryColor.withValues(alpha: 0.3),
+                              shape: BoxShape.circle,
+                              border: Border.all(color: primaryColor, width: 2),
+                            ),
+                            child: const Icon(
+                              Icons.location_on,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
               ],
             ),
           ),
@@ -325,7 +369,7 @@ class _MapScreenState extends State<MapScreen>
                 _GlassIconButton(
                   icon: Icons.near_me,
                   onTap: () {
-                    _mapController.move(_center, 14.0);
+                    _mapController.move(_currentPosition, 14.0);
                   },
                   primaryColor: primaryColor,
                   isSquare: true,
