@@ -1,0 +1,22 @@
+﻿Analyzing climora...                                            
+
+  error - The constructor being called isn't a const constructor - lib\screens\desktop_home_view.dart:116:32 - const_with_non_const
+   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:119:34 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:127:23 - unnecessary_const
+  error - The constructor being called isn't a const constructor - lib\screens\desktop_home_view.dart:129:32 - const_with_non_const
+   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:132:34 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:140:23 - unnecessary_const
+  error - The constructor being called isn't a const constructor - lib\screens\desktop_home_view.dart:142:32 - const_with_non_const
+   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:145:34 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:152:23 - unnecessary_const
+  error - The constructor being called isn't a const constructor - lib\screens\desktop_home_view.dart:154:32 - const_with_non_const
+   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:157:34 - unnecessary_const
+  error - The constructor being called isn't a const constructor - lib\screens\desktop_home_view.dart:202:32 - const_with_non_const
+   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:204:34 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:211:23 - unnecessary_const
+  error - The constructor being called isn't a const constructor - lib\screens\desktop_home_view.dart:213:32 - const_with_non_const
+   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:215:34 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:222:23 - unnecessary_const
+  error - The constructor being called isn't a const constructor - lib\screens\desktop_home_view.dart:224:32 - const_with_non_const
+   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:226:34 - unnecessary_const
+

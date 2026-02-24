@@ -110,7 +110,7 @@ class DesktopHomeView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  const Row(
+                  Row(
                     children: [
                       Expanded(
                         child: GestureDetector(
@@ -196,7 +196,7 @@ class DesktopHomeView extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 24),
-                  const Row(
+                  Row(
                     children: [
                       Expanded(
                         child: GestureDetector(
