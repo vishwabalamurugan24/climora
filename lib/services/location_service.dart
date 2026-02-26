@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:climora/domain/entities/place_recommendation.dart';
 
 class LocationService {
-  final String _baseUrl = 'http://localhost:8000';
+  final String _baseUrl = 'http://localhost:3000';
 
   Future<List<PlaceRecommendation>> getNearbyMoodSpots({
     required double lat,
@@ -14,12 +14,12 @@ class LocationService {
   }) async {
     try {
       final response = await http.get(
-        Uri.parse('$_baseUrl/api/map/spots?lat=$lat&lon=$lon&vibe=$targetVibe'),
+        Uri.parse('$_baseUrl/api/map/locations'),
       );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final List spots = data['spots'] ?? [];
+        final List spots = data ?? [];
         return spots
             .map(
               (s) => PlaceRecommendation(
@@ -28,8 +28,8 @@ class LocationService {
                 description: 'Powered by Climora Cloud',
                 latitude: (s['latitude'] as num).toDouble(),
                 longitude: (s['longitude'] as num).toDouble(),
-                vibe: s['vibe'],
-                category: s['category'],
+                vibe: 'any',
+                category: 'any',
               ),
             )
             .toList();
