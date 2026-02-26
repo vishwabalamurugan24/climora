@@ -75,6 +75,7 @@ model Location {
   createdAt DateTime @default(now())
 }
 
+/*
 enum TimeRange {
   MORNING
   AFTERNOON
@@ -110,3 +111,4 @@ enum SongMood {
   LONELY
   CALM
 }
+*/
