@@ -176,8 +176,8 @@ class _ClimoraHomeScreenState extends State<ClimoraHomeScreen> {
                           context,
                           title: 'Nearby Discoveries',
                           subtitle: 'Find your perfect mood spot',
-                          icon: Icons.map_outlined,
-                          route: '/navigation',
+                          icon: Icons.map,
+                          route: '/map',
                         ),
                         const SizedBox(height: 16),
                         _buildFullWidthAction(
