@@ -3,6 +3,9 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth';
 import settingsRoutes from './routes/settings';
+import musicRoutes from './routes/music';
+import mapRoutes from './routes/map';
+import weatherRoutes from './routes/weather';
 
 dotenv.config();
 
@@ -15,13 +18,10 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/settings', settingsRoutes);
-
-app.get('/health', (req, res) => {
-    res.json({ status: 'active', timestamp: new Date() });
-});
+app.use('/api/music', musicRoutes);
+app.use('/api/map', mapRoutes);
+app.use('/api/weather', weatherRoutes);
 
 app.listen(PORT, () => {
-    console.log(`Climora Backend running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
-
-export default app;

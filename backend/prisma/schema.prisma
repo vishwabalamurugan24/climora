@@ -11,13 +11,15 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String     @id @default(uuid())
+  email     String     @unique
   password  String
   name      String?
   settings  UserSettings?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  playlists Playlist[]
+  locations Location[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 model UserSettings {
@@ -30,13 +32,81 @@ model UserSettings {
 }
 
 model Song {
-  id              String   @id @default(uuid())
+  id              String         @id @default(uuid())
   title           String
   artist          String
   assetPath       String
-  genres          String   // Comma separated
-  languages       String   // Comma separated
-  moods           String   // Comma separated SongMood enums
-  weatherTriggers String   // Comma separated WeatherTrigger enums
-  idealTimeRanges String   // Comma separated TimeRange enums
+  genres          String         // Comma separated
+  languages       String         // Comma separated
+  moods           String         // Comma separated SongMood enums
+  weatherTriggers String         // Comma separated WeatherTrigger enums
+  idealTimeRanges String         // Comma separated TimeRange enums
+  playlistItems   PlaylistItem[]
+}
+
+model Playlist {
+  id          String         @id @default(uuid())
+  name        String
+  userId      String
+  user        User           @relation(fields: [userId], references: [id])
+  items       PlaylistItem[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model PlaylistItem {
+  id         String   @id @default(uuid())
+  playlistId String
+  playlist   Playlist @relation(fields: [playlistId], references: [id])
+  songId     String
+  song       Song     @relation(fields: [songId], references: [id])
+  addedAt    DateTime @default(now())
+
+  @@unique([playlistId, songId])
+}
+
+model Location {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  name      String
+  latitude  Float
+  longitude Float
+  createdAt DateTime @default(now())
+}
+
+enum TimeRange {
+  MORNING
+  AFTERNOON
+  EVENING
+  NIGHT
+}
+
+enum WeatherTrigger {
+  CLEAR
+  CLOUDS
+  RAIN
+  DRIZZLE
+  THUNDERSTORM
+  SNOW
+  MIST
+  SMOKE
+  HAZE
+  DUST
+  FOG
+  SAND
+  ASH
+  SQUALL
+  TORNADO
+}
+
+enum SongMood {
+  HAPPY
+  SAD
+  ENERGETIC
+  RELAXED
+  ROMANTIC
+  MOTIVATIONAL
+  LONELY
+  CALM
 }

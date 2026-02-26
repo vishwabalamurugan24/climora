@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:climora/domain/entities/place_recommendation.dart';
 
@@ -34,8 +36,11 @@ class LocationService {
       }
     } catch (e) {
       // Fallback to mock data on error/timeout
-      print('Backend error, falling back to mock: $e');
+      log('Backend error, falling back to mock: $e');
     }
+
+    final random = Random();
+    double randomOffset() => (random.nextDouble() - 0.5) * 0.02;
 
     // Existing Mock logic
     return [
@@ -43,8 +48,8 @@ class LocationService {
         id: 'spot_1',
         name: 'Zen Garden Path (Local)',
         description: 'A quiet walking path with bamboo trees.',
-        latitude: lat + 0.005,
-        longitude: lon + 0.005,
+        latitude: lat + randomOffset(),
+        longitude: lon + randomOffset(),
         vibe: 'calm',
         category: 'Park',
       ),
@@ -52,8 +57,8 @@ class LocationService {
         id: 'spot_2',
         name: 'Electric Street Coffee (Local)',
         description: 'High-energy espresso bar with lo-fi beats.',
-        latitude: lat - 0.003,
-        longitude: lon + 0.002,
+        latitude: lat + randomOffset(),
+        longitude: lon + randomOffset(),
         vibe: 'energetic',
         category: 'Cafe',
       ),
@@ -61,8 +66,8 @@ class LocationService {
         id: 'spot_3',
         name: 'Silent Library Annex (Local)',
         description: 'Perfect for deep focus and reading.',
-        latitude: lat + 0.001,
-        longitude: lon - 0.004,
+        latitude: lat + randomOffset(),
+        longitude: lon + randomOffset(),
         vibe: 'focus',
         category: 'Education',
       ),
