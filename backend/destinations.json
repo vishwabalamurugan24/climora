@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Mountain View Park",
+    "category": "Park",
+    "description": "A serene park with beautiful trails and a stunning view of the mountains.",
+    "imageUrl": "https://images.unsplash.com/photo-1586348943529-beaae6c28db9?q=80&w=2940&auto=format&fit=crop",
+    "suitableWeather": ["Clear", "Clouds"],
+    "bestSeasons": ["Spring", "Summer", "Autumn"]
+  },
+  {
+    "name": "City Central Library",
+    "category": "Library",
+    "description": "A quiet and modern library, perfect for a rainy day.",
+    "imageUrl": "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?q=80&w=2940&auto=format&fit=crop",
+    "suitableWeather": ["Rain", "Clear", "Clouds"],
+    "bestSeasons": ["Winter", "Autumn", "Spring", "Summer"]
+  },
+  {
+    "name": "Sunny Beachfront",
+    "category": "Beach",
+    "description": "Golden sands and clear water, ideal for a sunny day out.",
+    "imageUrl": "https://images.unsplash.com/photo-1507525428034-b723a996f3ea?q=80&w=2940&auto=format&fit=crop",
+    "suitableWeather": ["Clear"],
+    "bestSeasons": ["Summer"]
+  }
+]
