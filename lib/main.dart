@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'core/theme/app_theme.dart';
@@ -21,10 +22,33 @@ import 'presentation/blocs/aura/aura_bloc.dart';
 import 'presentation/blocs/aura/aura_event.dart';
 import 'presentation/blocs/aura/aura_state.dart';
 import 'services/weather_service.dart';
+import 'services/cloud_data_service.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    debugPrint('Firebase initialization failed: $e');
+  }
+
+  final cloudDataService = CloudDataService();
+
   runApp(
-    BlocProvider(create: (context) => AuraBloc(), child: const ClimoraApp()),
+    MultiProvider(
+      providers: [Provider<CloudDataService>.value(value: cloudDataService)],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuraBloc>(
+            create: (context) => AuraBloc(cloudDataService: cloudDataService),
+          ),
+        ],
+        child: const ClimoraApp(),
+      ),
+    ),
   );
 }
 
@@ -85,6 +109,18 @@ class _ClimoraHomeScreenState extends State<ClimoraHomeScreen> {
       context.read<AuraBloc>().add(
         ContextChanged(weatherDescription: weather.description),
       );
+
+      // Sync initial context to cloud
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        context.read<AuraBloc>().add(
+          SyncToCloud(
+            userId: user.uid,
+            weatherCondition: weather.description,
+            temperature: weather.temp,
+          ),
+        );
+      }
     }
   }
 

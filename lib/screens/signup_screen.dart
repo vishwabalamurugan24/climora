@@ -7,334 +7,110 @@ class SignupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFFC2B180);
-    const backgroundDark = Color(0xFF0A1A1A);
+    const primaryCream = Color(0xFFF5F5F0);
+    const backgroundDarkTeal = Color(0xFF162624);
+    const inputBackgroundTeal = Color(0xFF101C1A);
+    const textLightGray = Color(0xFFB0B0B0);
 
     return Scaffold(
-      backgroundColor: backgroundDark,
-      body: Stack(
-        children: [
-          // Background Mesh
-          const _MeshBackground(primaryColor: primaryColor),
-
-          SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 48,
+      backgroundColor: backgroundDarkTeal,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Header
+                Text(
+                  'Join',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.inter(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
                 ),
-                child: Column(
+                Text(
+                  'Climora',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.playfairDisplay(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // Sub-header
+                Text(
+                  'Create an account to start your wellness journey.',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    color: textLightGray,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+
+                const SizedBox(height: 48),
+
+                // Form config
+                const _SignupForm(
+                  primaryCream: primaryCream,
+                  inputBackground: inputBackgroundTeal,
+                ),
+
+                const SizedBox(height: 40),
+
+                // Social Signup / Footer
+                const _SocialSection(inputBackground: inputBackgroundTeal),
+
+                const SizedBox(height: 48),
+
+                // Log In Link
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Logo Section
-                    const _LogoSection(primaryColor: primaryColor),
-
-                    const SizedBox(height: 32),
-
-                    // Signup Form Card
-                    _SignupCard(
-                      primaryColor: primaryColor,
-                      backgroundDark: backgroundDark,
+                    Text(
+                      'Already have an account? ',
+                      style: GoogleFonts.inter(
+                        color: textLightGray,
+                        fontSize: 14,
+                      ),
                     ),
-
-                    const SizedBox(height: 32),
-
-                    // Footer Link
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Already have an account?',
-                          style: GoogleFonts.spaceGrotesk(
-                            color: Colors.white.withValues(alpha: 0.4),
-                            fontSize: 14,
-                          ),
+                    GestureDetector(
+                      onTap: () =>
+                          Navigator.pushReplacementNamed(context, '/login'),
+                      child: Text(
+                        'Log In',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
                         ),
-                        const SizedBox(width: 4),
-                        GestureDetector(
-                          onTap: () =>
-                              Navigator.pushReplacementNamed(context, '/login'),
-                          child: Text(
-                            'Log In',
-                            style: GoogleFonts.spaceGrotesk(
-                              color: primaryColor,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
-              ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 }
 
-class _MeshBackground extends StatelessWidget {
-  final Color primaryColor;
-  const _MeshBackground({required this.primaryColor});
+class _SignupForm extends StatelessWidget {
+  final Color primaryCream;
+  final Color inputBackground;
 
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-            color: Color(0xFF061111),
-            gradient: RadialGradient(
-              center: Alignment.topLeft,
-              radius: 1.5,
-              colors: [Color(0xFF132D2D), Colors.transparent],
-            ),
-          ),
-        ),
-        Positioned(
-          top: 0,
-          right: 0,
-          child: Container(
-            width: 400,
-            height: 400,
-            decoration: const BoxDecoration(
-              gradient: RadialGradient(
-                center: Alignment.center,
-                colors: [Color(0xFF1C3E3E), Colors.transparent],
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: Container(
-            width: 500,
-            height: 500,
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                center: Alignment.center,
-                colors: [
-                  primaryColor.withValues(alpha: 0.05),
-                  Colors.transparent,
-                ],
-              ),
-            ),
-          ),
-        ),
-        // Visual Depth Orbs
-        Positioned(
-          top: -100,
-          left: -100,
-          child: Container(
-            width: 300,
-            height: 300,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: primaryColor.withValues(alpha: 0.05),
-            ),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 120, sigmaY: 120),
-              child: Container(color: Colors.transparent),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _LogoSection extends StatelessWidget {
-  final Color primaryColor;
-  const _LogoSection({required this.primaryColor});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            image: const DecorationImage(
-              image: NetworkImage(
-                'https://lh3.googleusercontent.com/aida-public/AB6AXuDJCuGOe_qLqiE25O_v5-3LsvLK5LJ-VSX01JlYhu1pb2PWfN1iq52TtUiL8QBQNoxlqowTZkay6oh7aToOjkXVD_NDUY45JdPO89c1WCvehUkc7lzFlz1DajdBM1P8dbD4GU7fhQ0UL2Bpa72ThjZtZGqiLznugtoTpmQ8vyGmbCZpcxD4Rv6rXp46wsWqSgn6aelBqv3o65PM1GD1ttSAT45NTGIB3dsOnrpJY4EEC5MBAffuLDdgxWn8md9Lnm6MTY3SSs9VmBKr',
-              ),
-              fit: BoxFit.contain,
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        RichText(
-          text: TextSpan(
-            style: GoogleFonts.spaceGrotesk(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 4,
-              color: Colors.white,
-            ),
-            children: [const TextSpan(text: 'CLIMORA')],
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'The future of intelligence is here.',
-          style: GoogleFonts.spaceGrotesk(
-            color: Colors.white.withValues(alpha: 0.4),
-            fontSize: 14,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _SignupCard extends StatelessWidget {
-  final Color primaryColor;
-  final Color backgroundDark;
-
-  const _SignupCard({required this.primaryColor, required this.backgroundDark});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(32),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.5),
-            blurRadius: 40,
-            offset: const Offset(0, 20),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Create Your Account',
-            style: GoogleFonts.spaceGrotesk(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 32),
-          const _SignupInput(
-            label: 'Full Name',
-            hint: 'John Doe',
-            icon: Icons.person_outline,
-          ),
-          const SizedBox(height: 20),
-          const _SignupInput(
-            label: 'Email Address',
-            hint: 'name@example.com',
-            icon: Icons.mail_outline,
-          ),
-          const SizedBox(height: 20),
-          const _SignupInput(
-            label: 'Password',
-            hint: '••••••••',
-            icon: Icons.lock_outline,
-            isPassword: true,
-          ),
-          const SizedBox(height: 32),
-          GestureDetector(
-            onTap: () => Navigator.pushReplacementNamed(context, '/home'),
-            child: Container(
-              height: 56,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: primaryColor,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: primaryColor.withValues(alpha: 0.2),
-                    blurRadius: 20,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Text(
-                  'Create Account',
-                  style: GoogleFonts.spaceGrotesk(
-                    color: backgroundDark,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 32),
-          // Divider
-          Row(
-            children: [
-              Expanded(
-                child: Divider(color: Colors.white.withValues(alpha: 0.1)),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'OR SIGN UP WITH',
-                  style: GoogleFonts.spaceGrotesk(
-                    color: Colors.white.withValues(alpha: 0.3),
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Divider(color: Colors.white.withValues(alpha: 0.1)),
-              ),
-            ],
-          ),
-          const SizedBox(height: 32),
-          // Social Buttons
-          Row(
-            children: [
-              Expanded(
-                child: _SocialButton(
-                  icon: 'google',
-                  label: 'Google',
-                  backgroundDark: backgroundDark,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _SocialButton(
-                  icon: 'apple',
-                  label: 'Apple',
-                  backgroundDark: backgroundDark,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _SignupInput extends StatelessWidget {
-  final String label;
-  final String hint;
-  final IconData icon;
-  final bool isPassword;
-
-  const _SignupInput({
-    required this.label,
-    required this.hint,
-    required this.icon,
-    this.isPassword = false,
+  const _SignupForm({
+    required this.primaryCream,
+    required this.inputBackground,
   });
 
   @override
@@ -342,51 +118,61 @@ class _SignupInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 4),
-          child: Text(
-            label,
-            style: GoogleFonts.spaceGrotesk(
-              color: Colors.white.withValues(alpha: 0.7),
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+        _InputBox(
+          hint: 'Full Name',
+          icon: Icons.person_outline,
+          inputBackground: inputBackground,
         ),
-        const SizedBox(height: 8),
-        Container(
-          height: 56,
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              Icon(icon, color: Colors.white.withValues(alpha: 0.3), size: 20),
-              const SizedBox(width: 12),
-              Expanded(
-                child: TextField(
-                  obscureText: isPassword,
-                  style: GoogleFonts.spaceGrotesk(color: Colors.white),
-                  decoration: InputDecoration(
-                    hintText: hint,
-                    hintStyle: GoogleFonts.spaceGrotesk(
-                      color: Colors.white.withValues(alpha: 0.2),
-                    ),
-                    border: InputBorder.none,
-                    isDense: true,
+        const SizedBox(height: 16),
+        _InputBox(
+          hint: 'Email Address',
+          icon: Icons.mail_outline,
+          inputBackground: inputBackground,
+        ),
+        const SizedBox(height: 16),
+        _InputBox(
+          hint: 'Password',
+          icon: Icons.lock_outline,
+          isPassword: true,
+          inputBackground: inputBackground,
+        ),
+        const SizedBox(height: 32),
+        // Submit Button
+        GestureDetector(
+          onTap: () => Navigator.pushReplacementNamed(context, '/home'),
+          child: Container(
+            height: 56,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: primaryCream,
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: primaryCream.withValues(alpha: 0.2),
+                  blurRadius: 20,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Sign Up',
+                  style: GoogleFonts.inter(
+                    color: const Color(0xFF162624),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-              if (isPassword)
-                Icon(
-                  Icons.visibility_outlined,
-                  color: Colors.white.withValues(alpha: 0.3),
+                const SizedBox(width: 8),
+                const Icon(
+                  Icons.chevron_right,
+                  color: Color(0xFF162624),
                   size: 20,
                 ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
@@ -394,39 +180,149 @@ class _SignupInput extends StatelessWidget {
   }
 }
 
-class _SocialButton extends StatelessWidget {
-  final String icon;
-  final String label;
-  final Color backgroundDark;
+class _InputBox extends StatelessWidget {
+  final String hint;
+  final IconData icon;
+  final bool isPassword;
+  final Color inputBackground;
 
-  const _SocialButton({
+  const _InputBox({
+    required this.hint,
     required this.icon,
-    required this.label,
-    required this.backgroundDark,
+    this.isPassword = false,
+    required this.inputBackground,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 48,
+      height: 56,
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        color: inputBackground,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.1)),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.white.withValues(alpha: 0.4), size: 20),
+          const SizedBox(width: 12),
+          Expanded(
+            child: TextField(
+              obscureText: isPassword,
+              style: GoogleFonts.inter(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: hint,
+                hintStyle: GoogleFonts.inter(color: const Color(0xFFB0B0B0)),
+                border: InputBorder.none,
+                isDense: true,
+              ),
+            ),
+          ),
+          if (isPassword)
+            Icon(
+              Icons.visibility_outlined,
+              color: Colors.white.withValues(alpha: 0.4),
+              size: 20,
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SocialSection extends StatelessWidget {
+  final Color inputBackground;
+
+  const _SocialSection({required this.inputBackground});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Divider(color: Colors.white.withValues(alpha: 0.1)),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'OR SIGN UP WITH',
+                style: GoogleFonts.inter(
+                  color: const Color(0xFFB0B0B0),
+                  fontSize: 10,
+                  letterSpacing: 1.5,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Divider(color: Colors.white.withValues(alpha: 0.1)),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+        Row(
+          children: [
+            Expanded(
+              child: _SocialButton(
+                iconWidget: Image.network(
+                  'https://lh3.googleusercontent.com/aida-public/AB6AXuAJNumS0cGtgysZVt76kA0A6Pnk3tA5wxMHKyVfr9ZlJziHEskvS_PUdeZEhQphfJjWdfaSiApTJ7i1RpGhKZT_rYlDkkMFy7yNIklqo7VI4aniGoTBHg91ftiw4bDmncUQgsnxfxnhbM1L3QG7chjargOQgYUb3rq_Yo0ySGiFJX4r6jU__MW_t58ES3dZ0MMe_eA2R6COVh1TDUf59rD3ZV8jTq7aAJv3dr59CU-vbKCYpV2L66NgF40NZXw1jP3RM-40Q7kbIuW2',
+                  width: 20,
+                  height: 20,
+                ),
+                label: 'Google',
+                inputBackground: inputBackground,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _SocialButton(
+                iconWidget: const Icon(
+                  Icons.phone_outlined,
+                  color: Colors.white70,
+                  size: 20,
+                ),
+                label: 'Phone',
+                inputBackground: inputBackground,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _SocialButton extends StatelessWidget {
+  final Widget iconWidget;
+  final String label;
+  final Color inputBackground;
+
+  const _SocialButton({
+    required this.iconWidget,
+    required this.label,
+    required this.inputBackground,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 52,
+      decoration: BoxDecoration(
+        color: inputBackground,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.1)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Simplified icons for placeholder
-          Icon(
-            icon == 'google' ? Icons.g_mobiledata : Icons.apple,
-            color: Colors.white70,
-            size: 24,
-          ),
+          iconWidget,
           const SizedBox(width: 8),
           Text(
             label,
-            style: GoogleFonts.spaceGrotesk(
+            style: GoogleFonts.inter(
               color: Colors.white,
               fontSize: 14,
               fontWeight: FontWeight.w500,

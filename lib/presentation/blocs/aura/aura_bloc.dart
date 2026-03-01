@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:climora/presentation/blocs/aura/aura_event.dart';
 import 'package:climora/presentation/blocs/aura/aura_state.dart';
+import 'package:climora/services/cloud_data_service.dart';
 
 class AuraBloc extends Bloc<AuraEvent, AuraState> {
-  AuraBloc() : super(const AuraInitial()) {
+  final CloudDataService _cloudDataService;
+
+  AuraBloc({required CloudDataService cloudDataService})
+    : _cloudDataService = cloudDataService,
+      super(const AuraInitial()) {
     on<ContextChanged>(_onContextChanged);
+    on<SyncToCloud>(_onSyncToCloud);
   }
 
   void _onContextChanged(ContextChanged event, Emitter<AuraState> emit) {
@@ -44,5 +50,35 @@ class AuraBloc extends Bloc<AuraEvent, AuraState> {
     }
 
     emit(AuraUpdated(newColors));
+  }
+
+  Future<void> _onSyncToCloud(
+    SyncToCloud event,
+    Emitter<AuraState> emit,
+  ) async {
+    try {
+      if (event.vibe != null) {
+        await _cloudDataService.logMood(
+          userId: event.userId,
+          vibe: event.vibe!,
+        );
+      }
+      if (event.lat != null && event.lon != null) {
+        await _cloudDataService.logLocation(
+          userId: event.userId,
+          latitude: event.lat!,
+          longitude: event.lon!,
+        );
+      }
+      if (event.weatherCondition != null && event.temperature != null) {
+        await _cloudDataService.logWeather(
+          userId: event.userId,
+          condition: event.weatherCondition!,
+          temperature: event.temperature!,
+        );
+      }
+    } catch (e) {
+      debugPrint('Cloud sync failed: $e');
+    }
   }
 }
