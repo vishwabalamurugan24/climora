@@ -7,11 +7,10 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color primaryColor = Color(0xFFC2B180);
-    const Color backgroundDark = Color(0xFF0A1F1F);
+    const Color bgDark = Color(0xFF0F1C1A);
 
     return Scaffold(
-      backgroundColor: backgroundDark,
+      backgroundColor: bgDark,
       body: Stack(
         children: [
           SafeArea(
@@ -20,23 +19,17 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 children: [
                   // Header Section
-                  _ProfileHeader(primaryColor: primaryColor),
+                  const _ProfileHeader(),
 
                   const SizedBox(height: 16),
 
                   // Profile Identity
-                  _ProfileIdentity(
-                    primaryColor: primaryColor,
-                    backgroundDark: backgroundDark,
-                  ),
+                  const _ProfileIdentity(),
 
                   const SizedBox(height: 40),
 
                   // Settings Grid
-                  _SettingsGrid(
-                    primaryColor: primaryColor,
-                    backgroundDark: backgroundDark,
-                  ),
+                  const _SettingsGrid(),
                 ],
               ),
             ),
@@ -51,8 +44,7 @@ class ProfileScreen extends StatelessWidget {
 }
 
 class _ProfileHeader extends StatelessWidget {
-  final Color primaryColor;
-  const _ProfileHeader({required this.primaryColor});
+  const _ProfileHeader();
 
   @override
   Widget build(BuildContext context) {
@@ -62,26 +54,21 @@ class _ProfileHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _HeaderButton(
-            icon: Icons.chevron_left,
-            primaryColor: primaryColor,
+            icon: Icons.chevron_left_rounded,
             onTap: () => Navigator.pushReplacementNamed(context, '/home'),
           ),
           Text(
             'PROFILE',
-            style: GoogleFonts.spaceGrotesk(
+            style: GoogleFonts.inter(
               textStyle: const TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 color: Colors.white,
                 letterSpacing: 3,
               ),
             ),
           ),
-          _HeaderButton(
-            icon: Icons.more_vert,
-            primaryColor: primaryColor,
-            onTap: () {},
-          ),
+          _HeaderButton(icon: Icons.more_vert_rounded, onTap: () {}),
         ],
       ),
     );
@@ -90,13 +77,8 @@ class _ProfileHeader extends StatelessWidget {
 
 class _HeaderButton extends StatelessWidget {
   final IconData icon;
-  final Color primaryColor;
   final VoidCallback onTap;
-  const _HeaderButton({
-    required this.icon,
-    required this.primaryColor,
-    required this.onTap,
-  });
+  const _HeaderButton({required this.icon, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -105,26 +87,22 @@ class _HeaderButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.03),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
+          color: Colors.white.withValues(alpha: 0.05),
+          shape: BoxShape.circle,
         ),
-        child: Icon(icon, color: primaryColor, size: 24),
+        child: Icon(icon, color: Colors.white, size: 24),
       ),
     );
   }
 }
 
 class _ProfileIdentity extends StatelessWidget {
-  final Color primaryColor;
-  final Color backgroundDark;
-  const _ProfileIdentity({
-    required this.primaryColor,
-    required this.backgroundDark,
-  });
+  const _ProfileIdentity();
 
   @override
   Widget build(BuildContext context) {
+    const Color primaryCream = Color(0xFFEFE6D5);
+
     return Column(
       children: [
         Stack(
@@ -136,18 +114,18 @@ class _ProfileIdentity extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: primaryColor.withValues(alpha: 0.4),
+                  color: primaryCream.withValues(alpha: 0.4),
                   width: 2,
                 ),
-                image: DecorationImage(
-                  image: const NetworkImage(
+                image: const DecorationImage(
+                  image: NetworkImage(
                     'https://lh3.googleusercontent.com/aida-public/AB6AXuCxj3h01Wjwg6Muiu0pbKbXmEnH_hJwXuYLnYASeUQ50xLjVJQm-XoLxmHn0TRwMJhzAPMBGT9x2wNaPHJHQyarPA83vbm4c_DOfoURJ68DEGMWbHdI5O8sIr0nkC2aKGWMgmigGPk82UoI8-q9LY2cfNB0e9qpk-jT_wEBY9CAsK9p_DRvVJdjQs13MsDNYvLxHi5Eq2OT5oTo41mGPLlMHh3f6dHD3x36oKYP4zIu_scv8qsrN5pEhTySh81z9iFb0bGVfiC_za3f',
                   ),
                   fit: BoxFit.cover,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: primaryColor.withValues(alpha: 0.2),
+                    color: primaryCream.withValues(alpha: 0.2),
                     blurRadius: 20,
                   ),
                 ],
@@ -156,22 +134,27 @@ class _ProfileIdentity extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
-                color: primaryColor,
+                color: primaryCream,
                 shape: BoxShape.circle,
-                border: Border.all(color: backgroundDark, width: 4),
+                border: Border.all(color: const Color(0xFF0F1C1A), width: 4),
               ),
-              child: Icon(Icons.verified, size: 14, color: backgroundDark),
+              child: const Icon(
+                Icons.verified_rounded,
+                size: 14,
+                color: Color(0xFF0F1C1A),
+              ),
             ),
           ],
         ),
         const SizedBox(height: 16),
         Text(
           'Alex Rivera',
-          style: GoogleFonts.spaceGrotesk(
+          style: GoogleFonts.inter(
             textStyle: const TextStyle(
               fontSize: 28,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w700,
               color: Colors.white,
+              letterSpacing: -0.5,
             ),
           ),
         ),
@@ -180,34 +163,33 @@ class _ProfileIdentity extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: primaryColor.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: primaryColor.withValues(alpha: 0.3)),
+                color: const Color(0xFF142925),
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
                 'PRO MEMBER',
-                style: GoogleFonts.spaceGrotesk(
-                  textStyle: TextStyle(
+                style: GoogleFonts.inter(
+                  textStyle: const TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: primaryColor,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFFEFE6D5),
                     letterSpacing: 1,
                   ),
                 ),
               ),
             ),
             const SizedBox(width: 8),
-            const Text('•', style: TextStyle(color: Colors.grey)),
+            const Text('•', style: TextStyle(color: Color(0xFF5D7B75))),
             const SizedBox(width: 8),
             Text(
               'Climora Enthusiast',
-              style: GoogleFonts.spaceGrotesk(
+              style: GoogleFonts.inter(
                 textStyle: const TextStyle(
                   fontSize: 14,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w300,
+                  color: Color(0xFF5D7B75),
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -219,56 +201,48 @@ class _ProfileIdentity extends StatelessWidget {
 }
 
 class _SettingsGrid extends StatelessWidget {
-  final Color primaryColor;
-  final Color backgroundDark;
-  const _SettingsGrid({
-    required this.primaryColor,
-    required this.backgroundDark,
-  });
+  const _SettingsGrid();
 
   @override
   Widget build(BuildContext context) {
+    const Color primaryCream = Color(0xFFEFE6D5);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Column(
         children: [
-          _SettingTile(
-            icon: Icons.person_outline,
+          const _SettingTile(
+            icon: Icons.person_outline_rounded,
             title: 'Account Settings',
             subtitle: 'Personal info & privacy',
-            primaryColor: primaryColor,
           ),
           const SizedBox(height: 16),
-          _ClimateSyncTile(primaryColor: primaryColor),
+          const _ClimateSyncTile(),
           const SizedBox(height: 16),
-          _AudioQualityTile(
-            primaryColor: primaryColor,
-            backgroundDark: backgroundDark,
-          ),
+          const _AudioQualityTile(),
           const SizedBox(height: 16),
           _SettingTile(
-            icon: Icons.insights,
+            icon: Icons.insights_rounded,
             title: 'Mood History',
             subtitle: 'AI emotional tracking logs',
-            primaryColor: primaryColor,
             trailing: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: primaryColor.withValues(alpha: 0.1),
+                color: primaryCream.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Text(
+              child: const Text(
                 '+12%',
                 style: TextStyle(
                   fontSize: 10,
-                  color: primaryColor,
+                  color: primaryCream,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
           const SizedBox(height: 16),
-          _SubscriptionTile(primaryColor: primaryColor),
+          const _SubscriptionTile(),
         ],
       ),
     );
@@ -279,25 +253,24 @@ class _SettingTile extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-  final Color primaryColor;
   final Widget? trailing;
 
   const _SettingTile({
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.primaryColor,
     this.trailing,
   });
 
   @override
   Widget build(BuildContext context) {
+    const Color primaryCream = Color(0xFFEFE6D5);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
+        color: const Color(0xFF142925),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -305,16 +278,13 @@ class _SettingTile extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 44,
+                height: 44,
                 decoration: BoxDecoration(
-                  color: primaryColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: primaryColor.withValues(alpha: 0.2),
-                  ),
+                  color: primaryCream.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
                 ),
-                child: Icon(icon, color: primaryColor, size: 24),
+                child: Icon(icon, color: primaryCream, size: 24),
               ),
               const SizedBox(width: 16),
               Column(
@@ -322,20 +292,21 @@ class _SettingTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: GoogleFonts.inter(
                       textStyle: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),
                     ),
                   ),
                   Text(
                     subtitle,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: GoogleFonts.inter(
                       textStyle: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF5D7B75),
                       ),
                     ),
                   ),
@@ -345,8 +316,8 @@ class _SettingTile extends StatelessWidget {
           ),
           trailing ??
               Icon(
-                Icons.chevron_right,
-                color: Colors.grey.withValues(alpha: 0.5),
+                Icons.chevron_right_rounded,
+                color: const Color(0xFF5D7B75).withValues(alpha: 0.5),
               ),
         ],
       ),
@@ -355,17 +326,18 @@ class _SettingTile extends StatelessWidget {
 }
 
 class _ClimateSyncTile extends StatelessWidget {
-  final Color primaryColor;
-  const _ClimateSyncTile({required this.primaryColor});
+  const _ClimateSyncTile();
 
   @override
   Widget build(BuildContext context) {
+    const Color primaryCream = Color(0xFFEFE6D5);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: primaryColor.withValues(alpha: 0.3)),
+        color: const Color(0xFF142925),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: primaryCream.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
@@ -375,18 +347,15 @@ class _ClimateSyncTile extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 44,
+                    height: 44,
                     decoration: BoxDecoration(
-                      color: primaryColor.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: primaryColor.withValues(alpha: 0.4),
-                      ),
+                      color: primaryCream.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
                     ),
-                    child: Icon(
-                      Icons.cloud_sync,
-                      color: primaryColor,
+                    child: const Icon(
+                      Icons.cloud_sync_rounded,
+                      color: primaryCream,
                       size: 24,
                     ),
                   ),
@@ -396,20 +365,21 @@ class _ClimateSyncTile extends StatelessWidget {
                     children: [
                       Text(
                         'Climate Sync',
-                        style: GoogleFonts.spaceGrotesk(
+                        style: GoogleFonts.inter(
                           textStyle: const TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                         ),
                       ),
                       Text(
                         'Active - Rainy Mode',
-                        style: GoogleFonts.spaceGrotesk(
-                          textStyle: TextStyle(
-                            fontSize: 12,
-                            color: primaryColor,
+                        style: GoogleFonts.inter(
+                          textStyle: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: primaryCream,
                           ),
                         ),
                       ),
@@ -420,35 +390,33 @@ class _ClimateSyncTile extends StatelessWidget {
               Switch(
                 value: true,
                 onChanged: (val) {},
-                thumbColor: WidgetStatePropertyAll(primaryColor),
-                activeTrackColor: primaryColor.withValues(alpha: 0.3),
+                thumbColor: const WidgetStatePropertyAll(primaryCream),
+                activeTrackColor: primaryCream.withValues(alpha: 0.3),
               ),
             ],
           ),
           const SizedBox(height: 16),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: primaryColor.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
+              color: primaryCream.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(16),
             ),
             child: Row(
               children: [
-                // This _NavButton is part of _ClimateSyncTile, not the removed _FloatingNavBar
-                _NavButton(
-                  icon: Icons.add_chart_outlined,
+                const _NavButton(
+                  icon: Icons.add_chart_rounded,
                   label: 'Insights',
-                  primaryColor: primaryColor,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Text(
                     'AI is currently optimizing audio for interior acoustics during rainfall.',
-                    style: GoogleFonts.spaceGrotesk(
+                    style: GoogleFonts.inter(
                       textStyle: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF5D7B75),
                       ),
                     ),
                   ),
@@ -463,21 +431,18 @@ class _ClimateSyncTile extends StatelessWidget {
 }
 
 class _AudioQualityTile extends StatelessWidget {
-  final Color primaryColor;
-  final Color backgroundDark;
-  const _AudioQualityTile({
-    required this.primaryColor,
-    required this.backgroundDark,
-  });
+  const _AudioQualityTile();
 
   @override
   Widget build(BuildContext context) {
+    const Color primaryCream = Color(0xFFEFE6D5);
+    const Color bgDark = Color(0xFF0F1C1A);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
+        color: const Color(0xFF142925),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
         children: [
@@ -487,18 +452,15 @@ class _AudioQualityTile extends StatelessWidget {
               Row(
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
+                    width: 44,
+                    height: 44,
                     decoration: BoxDecoration(
-                      color: primaryColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: primaryColor.withValues(alpha: 0.2),
-                      ),
+                      color: primaryCream.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
                     ),
-                    child: Icon(
-                      Icons.graphic_eq,
-                      color: primaryColor,
+                    child: const Icon(
+                      Icons.graphic_eq_rounded,
+                      color: primaryCream,
                       size: 24,
                     ),
                   ),
@@ -508,20 +470,21 @@ class _AudioQualityTile extends StatelessWidget {
                     children: [
                       Text(
                         'Audio Quality',
-                        style: GoogleFonts.spaceGrotesk(
+                        style: GoogleFonts.inter(
                           textStyle: const TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                         ),
                       ),
                       Text(
                         'Adaptive Lossless',
-                        style: GoogleFonts.spaceGrotesk(
+                        style: GoogleFonts.inter(
                           textStyle: const TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF5D7B75),
                           ),
                         ),
                       ),
@@ -532,8 +495,8 @@ class _AudioQualityTile extends StatelessWidget {
               Switch(
                 value: true,
                 onChanged: (val) {},
-                thumbColor: WidgetStatePropertyAll(primaryColor),
-                activeTrackColor: primaryColor.withValues(alpha: 0.3),
+                thumbColor: const WidgetStatePropertyAll(primaryCream),
+                activeTrackColor: primaryCream.withValues(alpha: 0.3),
               ),
             ],
           ),
@@ -544,16 +507,23 @@ class _AudioQualityTile extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor,
-                    foregroundColor: backgroundDark,
+                    backgroundColor: primaryCream,
+                    foregroundColor: bgDark,
                     elevation: 0,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: const Text(
-                    'High Res',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  child: Text(
+                    'HIGH RES',
+                    style: GoogleFonts.inter(
+                      textStyle: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -562,16 +532,22 @@ class _AudioQualityTile extends StatelessWidget {
                 child: OutlinedButton(
                   onPressed: () {},
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                      color: Colors.white.withValues(alpha: 0.1),
-                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    side: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: const Text(
-                    'Standard',
-                    style: TextStyle(fontSize: 12, color: Colors.white),
+                  child: Text(
+                    'STANDARD',
+                    style: GoogleFonts.inter(
+                      textStyle: const TextStyle(
+                        fontSize: 11,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -584,20 +560,21 @@ class _AudioQualityTile extends StatelessWidget {
 }
 
 class _SubscriptionTile extends StatelessWidget {
-  final Color primaryColor;
-  const _SubscriptionTile({required this.primaryColor});
+  const _SubscriptionTile();
 
   @override
   Widget build(BuildContext context) {
+    const Color primaryCream = Color(0xFFEFE6D5);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: primaryColor.withValues(alpha: 0.02),
-        borderRadius: BorderRadius.circular(16),
+        color: const Color(0xFF142925),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: primaryColor.withValues(alpha: 0.4),
+          color: primaryCream.withValues(alpha: 0.2),
           style: BorderStyle.solid,
-        ), // Flutter doesn't support dashed borders natively without CustomPainter or package
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -605,18 +582,15 @@ class _SubscriptionTile extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 40,
-                height: 40,
+                width: 44,
+                height: 44,
                 decoration: BoxDecoration(
-                  color: primaryColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: primaryColor.withValues(alpha: 0.2),
-                  ),
+                  color: primaryCream.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.workspace_premium,
-                  color: primaryColor,
+                child: const Icon(
+                  Icons.workspace_premium_rounded,
+                  color: primaryCream,
                   size: 24,
                 ),
               ),
@@ -626,20 +600,21 @@ class _SubscriptionTile extends StatelessWidget {
                 children: [
                   Text(
                     'Subscription',
-                    style: GoogleFonts.spaceGrotesk(
+                    style: GoogleFonts.inter(
                       textStyle: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),
                     ),
                   ),
                   Text(
                     'Next billing on June 12, 2024',
-                    style: GoogleFonts.spaceGrotesk(
+                    style: GoogleFonts.inter(
                       textStyle: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF5D7B75),
                       ),
                     ),
                   ),
@@ -651,10 +626,13 @@ class _SubscriptionTile extends StatelessWidget {
             onPressed: () {},
             child: Text(
               'MANAGE',
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: primaryColor,
+              style: GoogleFonts.inter(
+                textStyle: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: primaryCream,
+                  letterSpacing: 1,
+                ),
               ),
             ),
           ),
@@ -667,30 +645,27 @@ class _SubscriptionTile extends StatelessWidget {
 class _NavButton extends StatelessWidget {
   final IconData icon;
   final String label;
-  final Color primaryColor;
 
-  const _NavButton({
-    required this.icon,
-    required this.label,
-    required this.primaryColor,
-  });
+  const _NavButton({required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {
-    const color = Colors.grey;
+    const Color iconColor = Color(0xFF5D7B75);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(icon, size: 24, color: color),
-        const SizedBox(height: 4),
+        Icon(icon, size: 24, color: iconColor),
+        const SizedBox(height: 8),
         Text(
           label.toUpperCase(),
-          style: GoogleFonts.spaceGrotesk(
-            textStyle: TextStyle(
-              fontSize: 8,
-              fontWeight: FontWeight.bold,
-              color: color,
+          style: GoogleFonts.inter(
+            textStyle: const TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: iconColor,
+              letterSpacing: 1,
             ),
           ),
         ),

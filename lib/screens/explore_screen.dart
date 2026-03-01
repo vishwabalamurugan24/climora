@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/climora_bottom_nav.dart';
@@ -8,40 +9,20 @@ class ExploreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFFC2B180);
-    const backgroundDark = Color(0xFF001A1A);
-    const tealAccent = Color(0xFF002B2B);
+    const bgDark = Color(0xFF0F1C1A);
 
     return Scaffold(
-      backgroundColor: backgroundDark,
+      backgroundColor: bgDark,
       body: Stack(
         children: [
-          // Background Gradient
-          Container(
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                center: Alignment.topRight,
-                radius: 1.5,
-                colors: [tealAccent, backgroundDark],
-              ),
-            ),
-          ),
-
           SafeArea(
             child: CustomScrollView(
               slivers: [
                 // Top Header
-                SliverToBoxAdapter(
-                  child: _HeaderSection(primaryColor: primaryColor),
-                ),
+                const SliverToBoxAdapter(child: _HeaderSection()),
 
                 // Search & Filter Section
-                SliverToBoxAdapter(
-                  child: _SearchSection(
-                    primaryColor: primaryColor,
-                    tealAccent: tealAccent,
-                  ),
-                ),
+                const SliverToBoxAdapter(child: _SearchSection()),
 
                 // Weather Matched Section
                 SliverToBoxAdapter(
@@ -62,10 +43,10 @@ class ExploreScreen extends StatelessWidget {
                               children: [
                                 Text(
                                   'Weather-Matched for You',
-                                  style: GoogleFonts.spaceGrotesk(
+                                  style: GoogleFonts.inter(
                                     textStyle: const TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -73,10 +54,11 @@ class ExploreScreen extends StatelessWidget {
                                 const SizedBox(height: 4),
                                 Text(
                                   'Based on your local overcast conditions',
-                                  style: GoogleFonts.spaceGrotesk(
+                                  style: GoogleFonts.inter(
                                     textStyle: const TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF5D7B75),
                                     ),
                                   ),
                                 ),
@@ -84,11 +66,12 @@ class ExploreScreen extends StatelessWidget {
                             ),
                             Text(
                               'VIEW ALL',
-                              style: GoogleFonts.spaceGrotesk(
-                                textStyle: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: primaryColor,
+                              style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFFEFE6D5),
+                                  letterSpacing: 0.5,
                                 ),
                               ),
                             ),
@@ -104,7 +87,7 @@ class ExploreScreen extends StatelessWidget {
                           children: [
                             Column(
                               children: [
-                                _ExploreCard(
+                                const _ExploreCard(
                                   imageUrl:
                                       'https://lh3.googleusercontent.com/aida-public/AB6AXuAYUe8pbrohNZ5pSXqlwYxa3N8lEqwRp9ZJW2nIOSI_ZbmAUZNGpAYP1ZD5mbdceHd1mM0C1H13bLECTNpd9VJy129AtaMLVInb3xYj078q73v5HPKiSnXuIPG95AIuJ8XTE5282MvSqS-gmK2_p-MGR3Ll0pRXmM5ayOf7oqYjhAIjFy8uqkThUvyupv-u7vtu9wgPXfUDefeFhJySd1z9elyvRWAVyPYRmAWdmjWFVz4KPYLfsZwLEtMIOcF0tvA73APWmCGqZghm',
                                   title: 'The Rainy Sanctuary',
@@ -114,11 +97,9 @@ class ExploreScreen extends StatelessWidget {
                                   match: '98%',
                                   description:
                                       'A hidden gem perfect for focus, matched with deep lo-fi beats.',
-                                  primaryColor: primaryColor,
-                                  backgroundDark: backgroundDark,
                                 ),
                                 const SizedBox(height: 16),
-                                _ExploreCard(
+                                const _ExploreCard(
                                   imageUrl:
                                       'https://lh3.googleusercontent.com/aida-public/AB6AXuDhQsl8_1oxHKDzSVRiQ6PxSkeX4VC_nkI-Mt_Z0XLjk2AqRGvhfBVS5bxFh8gi16H0R-M1WGRFpcBRA6GbNygXmhRyc6Kk3ENfIf45LSQbb4dVAXLpfhWNQ-1nRZDtpUqiomO4FMX6W2gR2PJZyFtllE2g4zfRAKJ4qyqYukiqcAj1mPbEt4t88O-I-vgJYsDusFmwxigF22QKhTEdpY_lldy0hKfgaBlRNmPNFeTtiF330FAK3C6Qs-0A5w8d8I9JISUUktKL24w_',
                                   title: 'Golden Peak',
@@ -128,8 +109,6 @@ class ExploreScreen extends StatelessWidget {
                                   match: '85%',
                                   description:
                                       'Crisp morning air paired with uplifting acoustic melodies.',
-                                  primaryColor: primaryColor,
-                                  backgroundDark: backgroundDark,
                                 ),
                               ],
                             ),
@@ -145,11 +124,7 @@ class ExploreScreen extends StatelessWidget {
           ),
 
           // Glass Bottom Navigation Bar
-          const ClimoraBottomNav(
-            currentRoute: '/explore',
-            primaryColor: primaryColor,
-            backgroundDark: backgroundDark,
-          ),
+          const ClimoraBottomNav(currentRoute: '/explore'),
         ],
       ),
     );
@@ -157,159 +132,148 @@ class ExploreScreen extends StatelessWidget {
 }
 
 class _HeaderSection extends StatelessWidget {
-  final Color primaryColor;
-  const _HeaderSection({required this.primaryColor});
+  const _HeaderSection();
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-          decoration: BoxDecoration(
-            color: const Color(0xFF002B2B).withValues(alpha: 0.6),
-            border: Border(
-              bottom: BorderSide(color: primaryColor.withValues(alpha: 0.1)),
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      color: const Color(0xFF0F1C1A),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
             children: [
-              Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.chevron_left, color: primaryColor),
-                    onPressed: () =>
-                        Navigator.pushReplacementNamed(context, '/home'),
-                  ),
-                  const SizedBox(width: 8),
-                  Icon(Icons.hub_outlined, color: primaryColor, size: 32),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Climora',
-                    style: GoogleFonts.spaceGrotesk(
-                      textStyle: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
+              IconButton(
+                icon: const Icon(
+                  Icons.chevron_left_rounded,
+                  color: Colors.white,
+                  size: 28,
+                ),
+                onPressed: () =>
+                    Navigator.pushReplacementNamed(context, '/home'),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
               ),
-              Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'CURRENT VIBE',
-                        style: GoogleFonts.spaceGrotesk(
-                          textStyle: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: primaryColor.withValues(alpha: 0.7),
-                            letterSpacing: 2,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        'MOODY & RAINY',
-                        style: GoogleFonts.spaceGrotesk(
-                          textStyle: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white30,
-                            letterSpacing: 2,
-                          ),
-                        ),
-                      ),
-                    ],
+              const SizedBox(width: 8),
+              const Icon(Icons.hub_rounded, color: Color(0xFFEFE6D5), size: 28),
+              const SizedBox(width: 8),
+              Text(
+                'Climora',
+                style: GoogleFonts.inter(
+                  textStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                    letterSpacing: -0.5,
                   ),
-                  const SizedBox(width: 12),
-                  Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: primaryColor.withValues(alpha: 0.2),
-                      border: Border.all(
-                        color: primaryColor.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: Icon(Icons.account_circle, color: primaryColor),
-                  ),
-                ],
+                ),
               ),
             ],
           ),
-        ),
+          Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'CURRENT VIBE',
+                    style: GoogleFonts.inter(
+                      textStyle: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF63746C),
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    'MOODY & RAINY',
+                    style: GoogleFonts.inter(
+                      textStyle: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFFEFE6D5),
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 12),
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/profile'),
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        'https://lh3.googleusercontent.com/aida-public/AB6AXuDHB24PlcmzlfcVkbsbpEwQbYJPgNYvfmjoliaFxiiLoLq6Clqw8V_98XOzqd6SNTYmI1ygrEGwrpYUlodZRYiU3HRZV_24oLTYyMRFmhVs5KKnSghPqw1e-Yz8D-9WVFowI4WbvZZb9MSyNdi0dIuIHigbOg3kqzlVNIzYPGgOpI77nGeWEcOqAJSpCVrHjkBYV7ZP-q9JOFrVKrVDITzYKegrdRGSYZmTs26V-0VmvXdrFHB6t5-kzdhxUR2xz8zp8ldLrj08O9E_',
+                      ),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 }
 
 class _SearchSection extends StatelessWidget {
-  final Color primaryColor;
-  final Color tealAccent;
-  const _SearchSection({required this.primaryColor, required this.tealAccent});
+  const _SearchSection();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
       child: Column(
         children: [
           Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              color: tealAccent.withValues(alpha: 0.4),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+              color: const Color(0xFF142925),
+              borderRadius: BorderRadius.circular(24),
             ),
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Search destinations by vibe...',
-                hintStyle: GoogleFonts.spaceGrotesk(
-                  color: Colors.grey,
-                  fontSize: 18,
+                hintStyle: GoogleFonts.inter(
+                  color: const Color(0xFF5D7B75),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
-                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                prefixIcon: const Icon(
+                  Icons.search_rounded,
+                  color: Color(0xFF5D7B75),
+                ),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(vertical: 20),
               ),
-              style: const TextStyle(color: Colors.white, fontSize: 18),
+              style: GoogleFonts.inter(color: Colors.white, fontSize: 16),
             ),
           ),
           const SizedBox(height: 20),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: [
+              children: const [
                 _MoodChip(
-                  icon: Icons.water_drop,
+                  icon: Icons.water_drop_rounded,
                   label: 'Rainy Day',
                   isActive: true,
-                  primaryColor: primaryColor,
                 ),
-                const SizedBox(width: 12),
-                _MoodChip(
-                  icon: Icons.coffee_outlined,
-                  label: 'Cozy',
-                  primaryColor: primaryColor,
-                ),
-                const SizedBox(width: 12),
-                _MoodChip(
-                  icon: Icons.terrain_outlined,
-                  label: 'Adventurous',
-                  primaryColor: primaryColor,
-                ),
-                const SizedBox(width: 12),
-                _MoodChip(
-                  icon: Icons.wb_sunny_outlined,
-                  label: 'Sunny Escape',
-                  primaryColor: primaryColor,
-                ),
+                SizedBox(width: 12),
+                _MoodChip(icon: Icons.coffee_rounded, label: 'Cozy'),
+                SizedBox(width: 12),
+                _MoodChip(icon: Icons.terrain_rounded, label: 'Adventurous'),
+                SizedBox(width: 12),
+                _MoodChip(icon: Icons.wb_sunny_rounded, label: 'Sunny Escape'),
               ],
             ),
           ),
@@ -323,37 +287,36 @@ class _MoodChip extends StatelessWidget {
   final IconData icon;
   final String label;
   final bool isActive;
-  final Color primaryColor;
 
   const _MoodChip({
     required this.icon,
     required this.label,
     this.isActive = false,
-    required this.primaryColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       decoration: BoxDecoration(
-        color: isActive ? primaryColor : Colors.white.withValues(alpha: 0.05),
+        color: isActive ? const Color(0xFFEFE6D5) : const Color(0xFF142925),
         borderRadius: BorderRadius.circular(30),
-        border: isActive
-            ? null
-            : Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Row(
         children: [
-          Icon(icon, size: 18, color: isActive ? Colors.black : Colors.grey),
+          Icon(
+            icon,
+            size: 18,
+            color: isActive ? const Color(0xFF0F1C1A) : const Color(0xFFEFE6D5),
+          ),
           const SizedBox(width: 8),
           Text(
             label,
-            style: GoogleFonts.spaceGrotesk(
+            style: GoogleFonts.inter(
               textStyle: TextStyle(
                 fontSize: 14,
-                fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
-                color: isActive ? Colors.black : Colors.grey,
+                fontWeight: FontWeight.w600,
+                color: isActive ? const Color(0xFF0F1C1A) : Colors.white,
               ),
             ),
           ),
@@ -371,8 +334,6 @@ class _ExploreCard extends StatelessWidget {
   final String weather;
   final String match;
   final String description;
-  final Color primaryColor;
-  final Color backgroundDark;
 
   const _ExploreCard({
     required this.imageUrl,
@@ -382,20 +343,15 @@ class _ExploreCard extends StatelessWidget {
     required this.weather,
     required this.match,
     required this.description,
-    required this.primaryColor,
-    required this.backgroundDark,
   });
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(24),
       child: Container(
-        height: 420,
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.03),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-        ),
+        height: 400,
+        decoration: const BoxDecoration(color: Color(0xFF142925)),
         child: Stack(
           children: [
             Image.network(
@@ -409,8 +365,11 @@ class _ExploreCard extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.bottomCenter,
                   end: Alignment.topCenter,
-                  colors: [backgroundDark, Colors.transparent],
-                  stops: const [0.0, 0.7],
+                  colors: [
+                    const Color(0xFF0F1C1A).withValues(alpha: 0.9),
+                    Colors.transparent,
+                  ],
+                  stops: const [0.0, 0.6],
                 ),
               ),
             ),
@@ -418,38 +377,39 @@ class _ExploreCard extends StatelessWidget {
               top: 16,
               right: 16,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(12),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
+                      horizontal: 14,
+                      vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: backgroundDark.withValues(alpha: 0.8),
-                      border: Border.all(
-                        color: primaryColor.withValues(alpha: 0.4),
-                      ),
+                      color: const Color(0xFF0F1C1A).withValues(alpha: 0.6),
                     ),
                     child: Row(
                       children: [
                         Text(
                           match,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: primaryColor,
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFFEFE6D5),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 6),
-                        const Text(
+                        Text(
                           'MATCH',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.grey,
-                            letterSpacing: 1,
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white70,
+                              letterSpacing: 1,
+                            ),
                           ),
                         ),
                       ],
@@ -462,75 +422,45 @@ class _ExploreCard extends StatelessWidget {
               bottom: 0,
               left: 0,
               right: 0,
-              child: ClipRRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-                  child: Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF002B2B).withValues(alpha: 0.6),
-                    ),
-                    child: Column(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  title,
-                                  style: GoogleFonts.spaceGrotesk(
-                                    textStyle: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                            Text(
+                              title,
+                              style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                  letterSpacing: -0.5,
                                 ),
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.location_on_outlined,
-                                      size: 12,
-                                      color: Colors.grey,
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      location,
-                                      style: GoogleFonts.spaceGrotesk(
-                                        textStyle: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                              ),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                            const SizedBox(height: 4),
+                            Row(
                               children: [
-                                Text(
-                                  temp,
-                                  style: GoogleFonts.spaceGrotesk(
-                                    textStyle: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                                const Icon(
+                                  Icons.location_on_rounded,
+                                  size: 14,
+                                  color: Color(0xFF5D7B75),
                                 ),
+                                const SizedBox(width: 4),
                                 Text(
-                                  weather.toUpperCase(),
-                                  style: GoogleFonts.spaceGrotesk(
+                                  location,
+                                  style: GoogleFonts.inter(
                                     textStyle: const TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.grey,
-                                      letterSpacing: 1,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF5D7B75),
                                     ),
                                   ),
                                 ),
@@ -538,22 +468,49 @@ class _ExploreCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 16),
-                        Text(
-                          description,
-                          style: GoogleFonts.spaceGrotesk(
-                            textStyle: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                              height: 1.5,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              temp,
+                              style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                            Text(
+                              weather.toUpperCase(),
+                              style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF5D7B75),
+                                  letterSpacing: 1,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ),
+                    const SizedBox(height: 16),
+                    Text(
+                      description,
+                      style: GoogleFonts.inter(
+                        textStyle: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF5D7B75),
+                          height: 1.5,
+                        ),
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
             ),

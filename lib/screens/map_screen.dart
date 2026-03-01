@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -90,11 +91,11 @@ class _MapScreenState extends State<MapScreen>
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFFC2B180);
-    const backgroundDark = Color(0xFF1D1B15);
+    const bgDark = Color(0xFF0F1C1A);
+    const primaryCream = Color(0xFFEFE6D5);
 
     return Scaffold(
-      backgroundColor: backgroundDark,
+      backgroundColor: bgDark,
       body: Stack(
         children: [
           // Live FlutterMap with Dark Tiles
@@ -104,7 +105,7 @@ class _MapScreenState extends State<MapScreen>
               options: MapOptions(
                 initialCenter: _currentPosition,
                 initialZoom: 14.0,
-                backgroundColor: backgroundDark,
+                backgroundColor: bgDark,
               ),
               children: [
                 TileLayer(
@@ -139,13 +140,13 @@ class _MapScreenState extends State<MapScreen>
                           height: 40,
                           child: Container(
                             decoration: BoxDecoration(
-                              color: primaryColor.withValues(alpha: 0.3),
+                              color: primaryCream.withValues(alpha: 0.3),
                               shape: BoxShape.circle,
-                              border: Border.all(color: primaryColor, width: 2),
+                              border: Border.all(color: primaryCream, width: 2),
                             ),
                             child: const Icon(
-                              Icons.location_on,
-                              color: Colors.white,
+                              Icons.location_on_rounded,
+                              color: Color(0xFF0F1C1A),
                               size: 20,
                             ),
                           ),
@@ -173,30 +174,30 @@ class _MapScreenState extends State<MapScreen>
                             width: 32,
                             height: 32,
                             decoration: const BoxDecoration(
-                              color: primaryColor,
+                              color: primaryCream,
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
-                              Icons.cyclone,
-                              color: backgroundDark,
+                              Icons.cyclone_rounded,
+                              color: bgDark,
                               size: 18,
                             ),
                           ),
                           const SizedBox(width: 8),
                           Text(
                             'Climora AI',
-                            style: GoogleFonts.spaceGrotesk(
+                            style: GoogleFonts.inter(
                               color: Colors.white,
                               fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: -0.5,
                             ),
                           ),
                         ],
                       ),
                       _GlassIconButton(
-                        icon: Icons.search,
+                        icon: Icons.search_rounded,
                         onTap: () {},
-                        primaryColor: primaryColor,
                       ),
                     ],
                   ),
@@ -206,7 +207,6 @@ class _MapScreenState extends State<MapScreen>
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: _GlassPanel(
-                    primaryColor: primaryColor,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -215,20 +215,20 @@ class _MapScreenState extends State<MapScreen>
                           children: [
                             Text(
                               'CURRENT SEASON',
-                              style: GoogleFonts.spaceGrotesk(
-                                color: primaryColor,
+                              style: GoogleFonts.inter(
+                                color: const Color(0xFF63746C),
                                 fontSize: 10,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w700,
                                 letterSpacing: 2,
                               ),
                             ),
                             const SizedBox(height: 4),
-                            const Text(
+                            Text(
                               'Summer Season',
-                              style: TextStyle(
+                              style: GoogleFonts.inter(
                                 color: Colors.white,
                                 fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ],
@@ -238,17 +238,17 @@ class _MapScreenState extends State<MapScreen>
                           children: [
                             Text(
                               'LOCAL CLIMATE',
-                              style: GoogleFonts.spaceGrotesk(
-                                color: Colors.white38,
+                              style: GoogleFonts.inter(
+                                color: const Color(0xFF63746C),
                                 fontSize: 10,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w700,
                                 letterSpacing: 2,
                               ),
                             ),
                             const SizedBox(height: 4),
-                            const Text(
+                            Text(
                               'High Humidity • 82°F',
-                              style: TextStyle(
+                              style: GoogleFonts.inter(
                                 color: Colors.white,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
@@ -274,20 +274,21 @@ class _MapScreenState extends State<MapScreen>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
+                            Text(
                               'Mood-Matched Recommendations',
-                              style: TextStyle(
+                              style: GoogleFonts.inter(
                                 color: Colors.white,
                                 fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                             Text(
-                              'View All',
-                              style: TextStyle(
-                                color: primaryColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                              'VIEW ALL',
+                              style: GoogleFonts.inter(
+                                color: primaryCream,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 1,
                               ),
                             ),
                           ],
@@ -316,7 +317,6 @@ class _MapScreenState extends State<MapScreen>
                                   title: rec['title'],
                                   subtitle: rec['subtitle'],
                                   tag: rec['tag'],
-                                  primaryColor: primaryColor,
                                 ),
                               ),
                             );
@@ -343,37 +343,34 @@ class _MapScreenState extends State<MapScreen>
             child: Column(
               children: [
                 _GlassIconButton(
-                  icon: Icons.add,
+                  icon: Icons.add_rounded,
                   onTap: () {
                     _mapController.move(
                       _mapController.camera.center,
                       _mapController.camera.zoom + 1,
                     );
                   },
-                  primaryColor: primaryColor,
                   isSquare: true,
                 ),
                 const SizedBox(height: 8),
                 _GlassIconButton(
-                  icon: Icons.remove,
+                  icon: Icons.remove_rounded,
                   onTap: () {
                     _mapController.move(
                       _mapController.camera.center,
                       _mapController.camera.zoom - 1,
                     );
                   },
-                  primaryColor: primaryColor,
                   isSquare: true,
                 ),
                 const SizedBox(height: 16),
                 _GlassIconButton(
-                  icon: Icons.near_me,
+                  icon: Icons.near_me_rounded,
                   onTap: () {
                     _mapController.move(_currentPosition, 14.0);
                   },
-                  primaryColor: primaryColor,
                   isSquare: true,
-                  iconColor: primaryColor,
+                  iconColor: primaryCream,
                 ),
               ],
             ),
@@ -384,7 +381,7 @@ class _MapScreenState extends State<MapScreen>
             top: 24,
             left: 16,
             child: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
               onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
             ),
           ),
@@ -397,14 +394,12 @@ class _MapScreenState extends State<MapScreen>
 class _GlassIconButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback onTap;
-  final Color primaryColor;
   final bool isSquare;
   final Color? iconColor;
 
   const _GlassIconButton({
     required this.icon,
     required this.onTap,
-    required this.primaryColor,
     this.isSquare = false,
     this.iconColor,
   });
@@ -421,9 +416,9 @@ class _GlassIconButton extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: const Color(0xFF1D1B15).withValues(alpha: 0.7),
+              color: const Color(0xFF0F1C1A).withValues(alpha: 0.8),
               borderRadius: BorderRadius.circular(isSquare ? 12 : 25),
-              border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
             ),
             child: Center(
               child: Icon(icon, color: iconColor ?? Colors.white, size: 20),
@@ -437,22 +432,21 @@ class _GlassIconButton extends StatelessWidget {
 
 class _GlassPanel extends StatelessWidget {
   final Widget child;
-  final Color primaryColor;
 
-  const _GlassPanel({required this.child, required this.primaryColor});
+  const _GlassPanel({required this.child});
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(20),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: const Color(0xFF1D1B15).withValues(alpha: 0.7),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
+            color: const Color(0xFF0F1C1A).withValues(alpha: 0.8),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
           ),
           child: child,
         ),
@@ -466,14 +460,12 @@ class _RecCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final String tag;
-  final Color primaryColor;
 
   const _RecCard({
     required this.imageUrl,
     required this.title,
     required this.subtitle,
     required this.tag,
-    required this.primaryColor,
   });
 
   @override
@@ -482,12 +474,12 @@ class _RecCard extends StatelessWidget {
       width: 240,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: const Color(0xFF1D1B15).withValues(alpha: 0.7),
-        borderRadius: BorderRadius.circular(20),
+        color: const Color(0xFF0F1C1A).withValues(alpha: 0.8),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
@@ -497,7 +489,7 @@ class _RecCard extends StatelessWidget {
                 height: 90,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                   image: DecorationImage(
                     image: NetworkImage(imageUrl),
                     fit: BoxFit.cover,
@@ -511,9 +503,9 @@ class _RecCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: const TextStyle(
+                      style: GoogleFonts.inter(
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w700,
                         fontSize: 14,
                       ),
                       maxLines: 1,
@@ -523,18 +515,19 @@ class _RecCard extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8,
-                      vertical: 2,
+                      vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: primaryColor.withValues(alpha: 0.2),
+                      color: const Color(0xFFEFE6D5).withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       tag,
-                      style: TextStyle(
-                        color: primaryColor,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                      style: GoogleFonts.inter(
+                        color: const Color(0xFFEFE6D5),
+                        fontSize: 9,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1,
                       ),
                     ),
                   ),
@@ -543,7 +536,11 @@ class _RecCard extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 subtitle,
-                style: const TextStyle(color: Colors.white38, fontSize: 11),
+                style: GoogleFonts.inter(
+                  color: const Color(0xFF5D7B75),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),

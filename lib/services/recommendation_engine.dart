@@ -1,36 +1,28 @@
-import 'package:climora/services/firestore_service.dart';
+import 'package:flutter/foundation.dart';
+class SongMetadata {
+  final String id;
+  final String title;
+  final String artist;
+  final String assetPath;
+  SongMetadata({
+    required this.id,
+    required this.title,
+    required this.artist,
+    required this.assetPath,
+  });
+}
 
 class RecommendationEngine {
-  final FirestoreService _firestoreService = FirestoreService();
-
-  /// Generates a personalized music playlist based on the user's current mood,
-  /// leveraging their AI profile.
-  Future<List<MusicTrack>> getPersonalizedMusic({
+  /// Generates a personalized music playlist based on the user's current mood.
+  Future<List<SongMetadata>> getPersonalizedMusic({
     required String currentMood,
   }) async {
-    // 1. Attempt to get a recommendation from the AI profile first.
-    final aiProfile = await _firestoreService.getAiProfile();
-
-    if (aiProfile != null &&
-        aiProfile.containsKey('bestMusicPerMood') &&
-        (aiProfile['bestMusicPerMood'] as Map).containsKey(currentMood)) {
-      final dynamic bestMusicData = aiProfile['bestMusicPerMood'][currentMood];
-
-      if (bestMusicData is List && bestMusicData.isNotEmpty) {
-        print("Found personalized recommendation in AI profile for mood: $currentMood");
-        final trackIds = List<String>.from(bestMusicData);
-        // Fetch the full track details for the recommended IDs.
-        return await _firestoreService.getTracksByIds(trackIds);
-      }
-    }
-
-    // 2. If no AI profile data is found for this mood, use a fallback.
-    print("No AI profile data for mood '$currentMood'. Using fallback.");
+    debugPrint("Using fallback for mood '$currentMood'.");
     return await _getFallbackMusic(currentMood);
   }
 
   /// Provides a generic, rule-based music recommendation as a fallback.
-  Future<List<MusicTrack>> _getFallbackMusic(String mood) {
+  Future<List<SongMetadata>> _getFallbackMusic(String mood) async {
     String category;
     switch (mood.toLowerCase()) {
       case 'stressed':
@@ -50,7 +42,28 @@ class RecommendationEngine {
         break;
     }
 
-    print("Fallback: Recommending '$category' category for '$mood' mood.");
-    return _firestoreService.getTracksByCategory(category);
+    debugPrint("Fallback: Recommending '$category' category for '$mood' mood.");
+    return [
+      SongMetadata(
+        id: '1',
+        title: 'Fallback Track',
+        artist: 'Climora',
+        assetPath: 'assets/music/${category}_1.mp3',
+      ),
+    ];
+  }
+
+  List<SongMetadata> getRecommendations({
+    required dynamic weather,
+    required dynamic settings,
+  }) {
+    return [
+      SongMetadata(
+        id: '1',
+        title: 'Ambient Track',
+        artist: 'Climora',
+        assetPath: 'assets/music/neutral_1.mp3',
+      ),
+    ];
   }
 }

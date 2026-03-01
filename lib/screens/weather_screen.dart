@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../services/weather_service.dart';
 import '../services/weather_utils.dart';
 import '../services/audio_service.dart';
@@ -22,8 +23,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
   final AudioService _audio = AudioService();
   bool _playing = false;
   final Map<String, double> _volumes = {};
-  DateTime? _lastUpdated;
-  String _dataSource = 'unknown'; // 'live', 'cached', 'mock'
 
   WeatherMusicSettings _settings = WeatherMusicSettings();
   final RecommendationService _recoService = RecommendationService();
@@ -40,15 +39,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
       if (w == null) throw Exception('No weather available');
       // determine source: if API key present, assume live; otherwise check cached timestamp
       if (_service.hasApiKey) {
-        _dataSource = 'live';
-        _lastUpdated = await _service.loadLastWeatherTimestamp();
+        // live data
       } else {
         final ts = await _service.loadLastWeatherTimestamp();
         if (ts != null) {
-          _dataSource = 'cached';
-          _lastUpdated = ts;
+          // cached
         } else {
-          _dataSource = 'mock';
+          // mock
         }
       }
       final suggestions = ClimateIndices.suggestAmbientSounds(w);
@@ -81,29 +78,63 @@ class _WeatherScreenState extends State<WeatherScreen> {
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (ctx) {
         WeatherMusicSettings temp = _settings;
         return StatefulBuilder(
           builder: (context, setSheetState) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Color bgDark = Color(0xFF0F1C1A);
+            const Color primaryCream = Color(0xFFEFE6D5);
+
+            return Container(
+              decoration: const BoxDecoration(
+                color: Color(0xFF142925),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(24),
+                  topRight: Radius.circular(24),
+                ),
+              ),
+              padding: const EdgeInsets.all(24.0),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Customize Weather-based Music',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: GoogleFonts.inter(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
                     ),
-                    const SizedBox(height: 12),
-                    const Text('Preferred Time Ranges:'),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Preferred Time Ranges:',
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF5D7B75),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
+                      runSpacing: 8,
                       children: TimeRange.values
                           .map(
-                            (tr) => FilterChip(
+                            (tr) => ChoiceChip(
                               label: Text(tr.name),
                               selected: temp.timeRanges.contains(tr),
+                              selectedColor: primaryCream.withValues(alpha: 0.2),
+                              backgroundColor: Colors.white.withValues(alpha: 0.05),
+                              labelStyle: GoogleFonts.inter(
+                                color: temp.timeRanges.contains(tr)
+                                    ? primaryCream
+                                    : Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              showCheckmark: false,
+                              side: BorderSide.none,
                               onSelected: (v) => setSheetState(
                                 () => temp = temp.copyWith(
                                   timeRanges:
@@ -117,15 +148,34 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           )
                           .toList(),
                     ),
-                    const SizedBox(height: 12),
-                    const Text('Weather Triggers:'),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Weather Triggers:',
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF5D7B75),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
+                      runSpacing: 8,
                       children: WeatherTrigger.values
                           .map(
-                            (wt) => FilterChip(
+                            (wt) => ChoiceChip(
                               label: Text(wt.name),
                               selected: temp.weatherTriggers.contains(wt),
+                              selectedColor: primaryCream.withValues(alpha: 0.2),
+                              backgroundColor: Colors.white.withValues(alpha: 0.05),
+                              labelStyle: GoogleFonts.inter(
+                                color: temp.weatherTriggers.contains(wt)
+                                    ? primaryCream
+                                    : Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              showCheckmark: false,
+                              side: BorderSide.none,
                               onSelected: (v) => setSheetState(
                                 () => temp = temp.copyWith(
                                   weatherTriggers:
@@ -139,15 +189,34 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           )
                           .toList(),
                     ),
-                    const SizedBox(height: 12),
-                    const Text('Preferred Languages:'),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Preferred Languages:',
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF5D7B75),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
+                      runSpacing: 8,
                       children: ['English', 'Tamil', 'Hindi']
                           .map(
-                            (lang) => FilterChip(
+                            (lang) => ChoiceChip(
                               label: Text(lang),
                               selected: temp.languages.contains(lang),
+                              selectedColor: primaryCream.withValues(alpha: 0.2),
+                              backgroundColor: Colors.white.withValues(alpha: 0.05),
+                              labelStyle: GoogleFonts.inter(
+                                color: temp.languages.contains(lang)
+                                    ? primaryCream
+                                    : Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              showCheckmark: false,
+                              side: BorderSide.none,
                               onSelected: (v) => setSheetState(
                                 () => temp = temp.copyWith(
                                   languages:
@@ -161,10 +230,19 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           )
                           .toList(),
                     ),
-                    const SizedBox(height: 12),
-                    const Text('Music Genres:'),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Music Genres:',
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF5D7B75),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
+                      runSpacing: 8,
                       children:
                           [
                                 'lo-fi',
@@ -174,9 +252,21 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 'devotional',
                               ]
                               .map(
-                                (g) => FilterChip(
+                                (g) => ChoiceChip(
                                   label: Text(g),
                                   selected: temp.genres.contains(g),
+                                  selectedColor: primaryCream.withValues(alpha: 0.2),
+                                  backgroundColor: Colors.white.withValues(alpha: 
+                                    0.05,
+                                  ),
+                                  labelStyle: GoogleFonts.inter(
+                                    color: temp.genres.contains(g)
+                                        ? primaryCream
+                                        : Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  showCheckmark: false,
+                                  side: BorderSide.none,
                                   onSelected: (v) => setSheetState(
                                     () => temp = temp.copyWith(
                                       genres:
@@ -190,48 +280,88 @@ class _WeatherScreenState extends State<WeatherScreen> {
                               )
                               .toList(),
                     ),
-                    const SizedBox(height: 12),
-                    const Text('Auto-play Duration:'),
-                    DropdownButton<Duration>(
-                      value: temp.autoPlayDuration,
-                      items:
-                          [
-                                const Duration(minutes: 15),
-                                const Duration(minutes: 30),
-                                const Duration(hours: 1),
-                              ]
-                              .map(
-                                (d) => DropdownMenuItem(
-                                  value: d,
-                                  child: Text(
-                                    d.inMinutes >= 60
-                                        ? '${d.inHours} hour'
-                                        : '${d.inMinutes} min',
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                      onChanged: (d) => setSheetState(
-                        () => temp = temp.copyWith(autoPlayDuration: d),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Auto-play Duration:',
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF5D7B75),
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<Duration>(
+                          value: temp.autoPlayDuration,
+                          dropdownColor: const Color(0xFF142925),
+                          icon: const Icon(
+                            Icons.arrow_drop_down,
+                            color: primaryCream,
+                          ),
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          items:
+                              [
+                                    const Duration(minutes: 15),
+                                    const Duration(minutes: 30),
+                                    const Duration(hours: 1),
+                                  ]
+                                  .map(
+                                    (d) => DropdownMenuItem(
+                                      value: d,
+                                      child: Text(
+                                        d.inMinutes >= 60
+                                            ? '${d.inHours} hour'
+                                            : '${d.inMinutes} min',
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                          onChanged: (d) => setSheetState(
+                            () => temp = temp.copyWith(autoPlayDuration: d),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                     SwitchListTile(
                       value: temp.smartNotifications,
                       onChanged: (v) => setSheetState(
                         () => temp = temp.copyWith(smartNotifications: v),
                       ),
-                      title: const Text(
-                        'Enable smart notifications for mood-based suggestions',
+                      activeThumbColor: primaryCream,
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        'Smart notifications for mood-based suggestions',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
                           onPressed: () => Navigator.pop(ctx),
-                          child: const Text('Cancel'),
+                          child: Text(
+                            'CANCEL',
+                            style: GoogleFonts.inter(
+                              color: const Color(0xFF5D7B75),
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                            ),
+                          ),
                         ),
                         const SizedBox(width: 12),
                         ElevatedButton(
@@ -239,7 +369,25 @@ class _WeatherScreenState extends State<WeatherScreen> {
                             setState(() => _settings = temp);
                             Navigator.pop(ctx);
                           },
-                          child: const Text('Save'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: primaryCream,
+                            foregroundColor: bgDark,
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: Text(
+                            'SAVE',
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -255,205 +403,492 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const Color bgDark = Color(0xFF0F1C1A);
+    const Color primaryCream = Color(0xFFEFE6D5);
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Weather'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
-        ),
-      ),
+      backgroundColor: bgDark,
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          SafeArea(
             child: ListView(
-              padding: const EdgeInsets.only(bottom: 100),
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Switch(
-                      value: _settings.enabled,
-                      onChanged: (v) => setState(
-                        () => _settings = _settings.copyWith(enabled: v),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      _settings.enabled
-                          ? 'Weather-based Song Mode: ON'
-                          : 'Weather-based Song Mode: OFF',
-                    ),
-                    const Spacer(),
-                    IconButton(
-                      icon: const Icon(Icons.settings),
-                      tooltip: 'Customize',
-                      onPressed: () => _showCustomizationPanel(context),
-                    ),
-                  ],
-                ),
-                const Divider(),
-                ElevatedButton(
-                  onPressed: _load,
-                  child: const Text('Get current weather'),
-                ),
-                const SizedBox(height: 16),
-                if (_loading) const Center(child: CircularProgressIndicator()),
-                if (_error != null)
-                  Text(
-                    'Error: $_error',
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                if (_weather != null) ...[
-                  if (_lastUpdated != null)
-                    Text(
-                      'Last updated: ${_lastUpdated!.toLocal()} ($_dataSource)',
-                    ),
-                  if (_lastUpdated == null) Text('Source: $_dataSource'),
-                  Text('Temperature: ${_weather!.temp} °C'),
-                  Text('Humidity: ${_weather!.humidity}%'),
-                  Text('Wind speed: ${_weather!.windSpeed} m/s'),
-                  Text('Cloudiness: ${_weather!.cloudiness}%'),
-                  Text('Description: ${_weather!.description}'),
-                  Text('Precipitation (mm): ${_weather!.precipitation ?? 0}'),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Comfort index: ${ClimateIndices.comfortIndex(_weather!.temp, _weather!.humidity, _weather!.windSpeed)}',
-                  ),
-                  const SizedBox(height: 8),
-                  Text('Suggested ambient sounds:'),
-                  const SizedBox(height: 6),
-                  Wrap(
-                    spacing: 8,
-                    children: _suggestions
-                        .map((s) => Chip(label: Text(s)))
-                        .toList(),
-                  ),
-                  const SizedBox(height: 12),
-                  if (_currentRecommendation?.songMetadata != null) ...[
-                    const Divider(),
-                    const Text(
-                      'Recommended Song:',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8),
-                    ListTile(
-                      leading: const Icon(Icons.music_note, color: Colors.blue),
-                      title: Text(_currentRecommendation!.songMetadata!.title),
-                      subtitle: Text(
-                        _currentRecommendation!.songMetadata!.artist,
-                      ),
-                      trailing: Wrap(
-                        spacing: 4,
-                        children: _currentRecommendation!.songMetadata!.genres
-                            .map(
-                              (g) => Chip(
-                                label: Text(
-                                  g,
-                                  style: const TextStyle(fontSize: 10),
-                                ),
-                                padding: EdgeInsets.zero,
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ),
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        final meta = _currentRecommendation!.songMetadata!;
-                        if (!_audio.isLoaded(meta.id)) {
-                          await _audio.loadAsset(
-                            meta.id,
-                            meta.assetPath,
-                            volume: _currentRecommendation!.volume,
-                          );
-                        }
-                        await _audio.setSpeed(
-                          meta.id,
-                          _currentRecommendation!.speed,
-                        );
-                        await _audio.play(meta.id);
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Playing ${meta.title}...')),
-                          );
-                        }
-                      },
-                      icon: const Icon(Icons.play_arrow),
-                      label: const Text('Play Recommended'),
-                    ),
-                    const Divider(),
-                  ],
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                        onPressed: _suggestions.isEmpty
-                            ? null
-                            : () async {
-                                if (!_playing) {
-                                  // load assets for suggestions (user should place matching files in assets/audio/)
-                                  for (final s in _suggestions) {
-                                    final path = 'assets/audio/$s.mp3';
-                                    if (!_audio.isLoaded(s)) {
-                                      try {
-                                        await _audio.loadAsset(
-                                          s,
-                                          path,
-                                          volume: _volumes[s] ?? 0.6,
-                                        );
-                                      } catch (_) {
-                                        // ignore missing assets for now
-                                      }
-                                    }
-                                    await _audio.play(s);
-                                  }
-                                  setState(() {
-                                    _playing = true;
-                                  });
-                                } else {
-                                  await _audio.stopAll();
-                                  setState(() {
-                                    _playing = false;
-                                  });
-                                }
-                              },
-                        child: Text(
-                          _playing ? 'Stop Ambient Mix' : 'Play Ambient Mix',
+                    GestureDetector(
+                      onTap: () =>
+                          Navigator.pushReplacementNamed(context, '/home'),
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.05),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.chevron_left_rounded,
+                          color: Colors.white,
+                          size: 24,
                         ),
                       ),
+                    ),
+                    Text(
+                      'WEATHER INSIGHTS',
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => _showCustomizationPanel(context),
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.05),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.settings_rounded,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF142925),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: primaryCream.withValues(alpha: 0.1)),
+                  ),
+                  child: Row(
+                    children: [
+                      Switch(
+                        value: _settings.enabled,
+                        onChanged: (v) => setState(
+                          () => _settings = _settings.copyWith(enabled: v),
+                        ),
+                        activeThumbColor: primaryCream,
+                      ),
                       const SizedBox(width: 12),
-                      ElevatedButton(
-                        onPressed: () async {
-                          await _audio.stopAll();
-                          setState(() {
-                            _playing = false;
-                          });
-                        },
-                        child: const Text('Stop All'),
+                      Expanded(
+                        child: Text(
+                          _settings.enabled
+                              ? 'Weather-based Song Mode is ON'
+                              : 'Weather-based Song Mode is OFF',
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ],
                   ),
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: _load,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryCream.withValues(alpha: 0.1),
+                    foregroundColor: primaryCream,
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(color: primaryCream.withValues(alpha: 0.2)),
+                    ),
+                  ),
+                  child: Text(
+                    'GET CURRENT WEATHER',
+                    style: GoogleFonts.inter(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                if (_loading)
+                  const Center(
+                    child: CircularProgressIndicator(color: primaryCream),
+                  ),
+                if (_error != null)
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.red.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Text(
+                      'Error: $_error',
+                      style: GoogleFonts.inter(color: Colors.redAccent),
+                    ),
+                  ),
+                if (_weather != null) ...[
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF142925),
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${_weather!.temp}°C',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 48,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                    letterSpacing: -2,
+                                  ),
+                                ),
+                                Text(
+                                  _weather!.description.toUpperCase(),
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                    color: primaryCream,
+                                    letterSpacing: 2,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Icon(
+                              Icons.cloud_rounded, // fallback icon
+                              size: 64,
+                              color: primaryCream.withValues(alpha: 0.8),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _WeatherStat(
+                              'HUMIDITY',
+                              '${_weather!.humidity}%',
+                              Icons.water_drop_rounded,
+                            ),
+                            _WeatherStat(
+                              'WIND',
+                              '${_weather!.windSpeed}m/s',
+                              Icons.air_rounded,
+                            ),
+                            _WeatherStat(
+                              'COMFORT',
+                              ClimateIndices.comfortIndex(
+                                _weather!.temp,
+                                _weather!.humidity,
+                                _weather!.windSpeed,
+                              ).toString(),
+                              Icons.sentiment_satisfied_rounded,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Suggested Ambient Sounds',
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
                   const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: _suggestions
+                        .map(
+                          (s) => Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: primaryCream.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              s,
+                              style: GoogleFonts.inter(
+                                fontSize: 13,
+                                color: primaryCream,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                  const SizedBox(height: 24),
+                  if (_currentRecommendation?.songMetadata != null) ...[
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            primaryCream.withValues(alpha: 0.15),
+                            primaryCream.withValues(alpha: 0.05),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(
+                          color: primaryCream.withValues(alpha: 0.2),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.auto_awesome_rounded,
+                                color: primaryCream,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'AI RECOMMENDATION',
+                                style: GoogleFonts.inter(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  color: primaryCream,
+                                  letterSpacing: 2,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Container(
+                              width: 48,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                color: primaryCream.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(
+                                Icons.music_note_rounded,
+                                color: primaryCream,
+                              ),
+                            ),
+                            title: Text(
+                              _currentRecommendation!.songMetadata!.title,
+                              style: GoogleFonts.inter(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                            subtitle: Text(
+                              _currentRecommendation!.songMetadata!.artist,
+                              style: GoogleFonts.inter(
+                                fontSize: 13,
+                                color: const Color(0xFF5D7B75),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: () async {
+                                final meta =
+                                    _currentRecommendation!.songMetadata!;
+                                if (!_audio.isLoaded(meta.id)) {
+                                  await _audio.loadAsset(
+                                    meta.id,
+                                    meta.assetPath,
+                                    volume: _currentRecommendation!.volume,
+                                  );
+                                }
+                                await _audio.setSpeed(
+                                  meta.id,
+                                  _currentRecommendation!.speed,
+                                );
+                                await _audio.play(meta.id);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Playing ${meta.title}...'),
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: const Color(0xFF142925),
+                                    ),
+                                  );
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: primaryCream,
+                                foregroundColor: bgDark,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                              ),
+                              icon: const Icon(Icons.play_arrow_rounded),
+                              label: Text(
+                                'PLAY RECOMMENDED',
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 1,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: _suggestions.isEmpty
+                              ? null
+                              : () async {
+                                  if (!_playing) {
+                                    // load assets for suggestions
+                                    for (final s in _suggestions) {
+                                      final path = 'assets/audio/$s.mp3';
+                                      if (!_audio.isLoaded(s)) {
+                                        try {
+                                          await _audio.loadAsset(
+                                            s,
+                                            path,
+                                            volume: _volumes[s] ?? 0.6,
+                                          );
+                                        } catch (_) {}
+                                      }
+                                      await _audio.play(s);
+                                    }
+                                    setState(() => _playing = true);
+                                  } else {
+                                    await _audio.stopAll();
+                                    setState(() => _playing = false);
+                                  }
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _playing
+                                ? Colors.redAccent.withValues(alpha: 0.2)
+                                : primaryCream.withValues(alpha: 0.1),
+                            foregroundColor: _playing
+                                ? Colors.redAccent
+                                : primaryCream,
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: Text(
+                            _playing ? 'STOP AMBIENT' : 'PLAY AMBIENT',
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () async {
+                            await _audio.stopAll();
+                            setState(() => _playing = false);
+                          },
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            side: BorderSide(
+                              color: Colors.white.withValues(alpha: 0.1),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: Text(
+                            'STOP ALL',
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  if (_suggestions.isNotEmpty)
+                    Text(
+                      'Mixer',
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  const SizedBox(height: 16),
                   ..._suggestions.map(
                     (s) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(s),
-                        Slider(
-                          value: _volumes[s] ?? 0.0,
-                          min: 0.0,
-                          max: 1.0,
-                          divisions: 20,
-                          onChanged: (v) async {
-                            setState(() {
-                              _volumes[s] = v;
-                            });
-                            if (_audio.isLoaded(s)) {
-                              await _audio.setVolume(s, v);
-                            }
-                          },
+                        Text(
+                          s.toUpperCase(),
+                          style: GoogleFonts.inter(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF5D7B75),
+                          ),
                         ),
+                        SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            activeTrackColor: primaryCream,
+                            inactiveTrackColor: primaryCream.withValues(alpha: 0.1),
+                            thumbColor: primaryCream,
+                            trackHeight: 4,
+                          ),
+                          child: Slider(
+                            value: _volumes[s] ?? 0.0,
+                            min: 0.0,
+                            max: 1.0,
+                            onChanged: (v) async {
+                              setState(() => _volumes[s] = v);
+                              if (_audio.isLoaded(s)) {
+                                await _audio.setVolume(s, v);
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 8),
                       ],
                     ),
                   ),
@@ -464,6 +899,44 @@ class _WeatherScreenState extends State<WeatherScreen> {
           const ClimoraBottomNav(currentRoute: '/weather'),
         ],
       ),
+    );
+  }
+}
+
+class _WeatherStat extends StatelessWidget {
+  final String label;
+  final String value;
+  final IconData icon;
+
+  const _WeatherStat(this.label, this.value, this.icon);
+
+  @override
+  Widget build(BuildContext context) {
+    const Color primaryCream = Color(0xFFEFE6D5);
+
+    return Column(
+      children: [
+        Icon(icon, color: primaryCream.withValues(alpha: 0.5), size: 20),
+        const SizedBox(height: 8),
+        Text(
+          value,
+          style: GoogleFonts.inter(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: GoogleFonts.inter(
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+            color: const Color(0xFF5D7B75),
+            letterSpacing: 1,
+          ),
+        ),
+      ],
     );
   }
 }

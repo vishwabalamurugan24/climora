@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:climora/domain/entities/place_recommendation.dart';
@@ -34,7 +35,7 @@ class LocationService {
       }
     } catch (e) {
       // Fallback to mock data on error/timeout
-      print('Backend error, falling back to mock: $e');
+      debugPrint('Backend error, falling back to mock: $e');
     }
 
     // Existing Mock logic
