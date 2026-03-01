@@ -16,9 +16,9 @@ class DesktopNowPlayingPanel extends StatelessWidget {
     return Container(
       width: 380,
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.2),
+        color: Colors.black.withOpacity(0.2),
         border: Border(
-          left: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+          left: BorderSide(color: Colors.white.withOpacity(0.05)),
         ),
       ),
       padding: const EdgeInsets.all(32.0),
@@ -51,14 +51,14 @@ class DesktopNowPlayingPanel extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.5),
+                    color: Colors.black.withOpacity(0.5),
                     blurRadius: 40,
                     offset: const Offset(0, 20),
                   ),
                 ],
                 image: const DecorationImage(
-                  image: NetworkImage(
-                    'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?auto=format&fit=crop&q=80&w=1000',
+                  image: AssetImage(
+                    'assets/icon/icon.png',
                   ),
                   fit: BoxFit.cover,
                 ),
@@ -71,7 +71,7 @@ class DesktopNowPlayingPanel extends StatelessWidget {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      Colors.black.withValues(alpha: 0.4),
+                      Colors.black.withOpacity(0.4),
                     ],
                   ),
                 ),
@@ -231,7 +231,7 @@ class DesktopNowPlayingPanel extends StatelessWidget {
                     overlayRadius: 12,
                   ),
                   activeTrackColor: primaryColor,
-                  inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
+                  inactiveTrackColor: Colors.white.withOpacity(0.1),
                   thumbColor: Colors.white,
                 ),
                 child: Slider(value: 0.4, onChanged: (v) {}),
@@ -255,7 +255,7 @@ class DesktopNowPlayingPanel extends StatelessWidget {
                     trackHeight: 2,
                     thumbShape: SliderComponentShape.noThumb,
                     activeTrackColor: Colors.white60,
-                    inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
+                    inactiveTrackColor: Colors.white.withOpacity(0.1),
                   ),
                   child: Slider(value: 0.75, onChanged: (v) {}),
                 ),
@@ -337,7 +337,7 @@ class _WaveformBarState extends State<_WaveformBar>
         width: 3,
         height: _animation.value,
         decoration: BoxDecoration(
-          color: widget.color.withValues(alpha: 0.8),
+          color: widget.color.withOpacity(0.8),
           borderRadius: BorderRadius.circular(2),
         ),
       ),
