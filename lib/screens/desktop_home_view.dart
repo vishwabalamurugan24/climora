@@ -87,10 +87,10 @@ class DesktopHomeView extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Row(
+                      const Row(
                         children: [
                           _ActionBtn(icon: Icons.refresh_rounded),
-                          const SizedBox(width: 12),
+                          SizedBox(width: 12),
                           _FilterBtn(),
                         ],
                       ),
@@ -180,7 +180,7 @@ class DesktopHomeView extends StatelessWidget {
                           letterSpacing: 2,
                         ),
                       ),
-                      Row(
+                      const Row(
                         children: [
                           Icon(
                             Icons.chevron_left_rounded,
@@ -257,9 +257,9 @@ class _ActionBtn extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: Colors.white.withOpacity(0.03),
         borderRadius: BorderRadius.circular(50),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
       child: Icon(icon, color: Colors.white70, size: 20),
     );
@@ -267,14 +267,16 @@ class _ActionBtn extends StatelessWidget {
 }
 
 class _FilterBtn extends StatelessWidget {
+  const _FilterBtn();
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
+        color: Colors.white.withOpacity(0.03),
         borderRadius: BorderRadius.circular(50),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        border: Border.all(color: Colors.white.withOpacity(0.05)),
       ),
       child: Row(
         children: [
@@ -321,13 +323,13 @@ class _MoodCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.03),
+          color: Colors.white.withOpacity(0.03),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+          border: Border.all(color: Colors.white.withOpacity(0.05)),
           boxShadow: glow
               ? [
                   BoxShadow(
-                    color: themeColor.withValues(alpha: 0.1),
+                    color: themeColor.withOpacity(0.1),
                     blurRadius: 40,
                     spreadRadius: -10,
                   ),
@@ -389,7 +391,7 @@ class _RecCard extends StatelessWidget {
                   'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=1000',
                 ),
                 fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(Colors.black38, BlendMode.darken),
+                colorFilter: const ColorFilter.mode(Colors.black38, BlendMode.darken),
               ),
             ),
             child: Stack(
@@ -403,7 +405,7 @@ class _RecCard extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.6),
+                      color: Colors.black.withOpacity(0.6),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(

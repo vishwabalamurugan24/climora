@@ -14,7 +14,6 @@ import 'screens/playlist_screen.dart';
 import 'screens/player_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
-import 'widgets/assistant_overlay.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'presentation/blocs/aura/aura_bloc.dart';
@@ -37,10 +36,7 @@ class ClimoraApp extends StatelessWidget {
       title: 'Climora',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
-      builder: (context, child) {
-        return AssistantOverlay(child: child!);
-      },
-      home: const LoginScreen(),
+      home: const HomeScreen(),
       routes: {
         '/login': (_) => const LoginScreen(),
         '/signup': (_) => const SignupScreen(),
@@ -257,7 +253,7 @@ class _ClimoraHomeScreenState extends State<ClimoraHomeScreen> {
     return AppTheme.glassBox(
       child: Material(
         color: isAction
-            ? Colors.red.withValues(alpha: 0.1)
+            ? Colors.red.withOpacity(0.1)
             : Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(24),

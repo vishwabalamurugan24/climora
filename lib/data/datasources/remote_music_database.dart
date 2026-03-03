@@ -2,10 +2,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:climora/core/errors/exceptions.dart';
-import 'package:climora/data/models/song_model.dart';
+import 'package:climora/domain/entities/song_entity.dart';
 
 abstract class RemoteMusicDatabase {
-  Future<List<SongModel>> getSongs();
+  Future<List<SongEntity>> getSongs();
 }
 
 class RemoteMusicDatabaseImpl implements RemoteMusicDatabase {
@@ -14,7 +14,7 @@ class RemoteMusicDatabaseImpl implements RemoteMusicDatabase {
   RemoteMusicDatabaseImpl({required this.client});
 
   @override
-  Future<List<SongModel>> getSongs() async {
+  Future<List<SongEntity>> getSongs() async {
     final response = await client.get(
       Uri.parse('http://localhost:3000/api/music'),
       headers: {
@@ -24,7 +24,7 @@ class RemoteMusicDatabaseImpl implements RemoteMusicDatabase {
 
     if (response.statusCode == 200) {
       final songs = jsonDecode(response.body) as List;
-      return songs.map((song) => SongModel.fromJson(song)).toList();
+      return songs.map((song) => SongEntity.fromJson(song)).toList();
     } else {
       throw ServerException();
     }

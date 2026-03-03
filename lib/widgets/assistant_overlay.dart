@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,6 +18,11 @@ class _AssistantOverlayState extends State<AssistantOverlay>
   late AnimationController _controller;
   AssistantStatus _status = AssistantStatus.idle;
   String _lastCommand = "";
+  String _lastAiResponse = "";
+  
+  final TextEditingController _aiInputController = TextEditingController();
+  final FocusNode _aiInputFocusNode = FocusNode();
+
 
   @override
   void initState() {
@@ -29,12 +35,22 @@ class _AssistantOverlayState extends State<AssistantOverlay>
     _service.statusStream.listen((status) {
       if (mounted) {
         setState(() => _status = status);
+         if (status == AssistantStatus.ai_listening) {
+          // Request focus when entering AI listening mode
+          FocusScope.of(context).requestFocus(_aiInputFocusNode);
+        }
       }
     });
 
     _service.commandStream.listen((command) {
       if (mounted) {
         setState(() => _lastCommand = command);
+      }
+    });
+    
+    _service.aiResponseStream.listen((response) {
+      if (mounted) {
+        setState(() => _lastAiResponse = response);
       }
     });
 
@@ -45,6 +61,8 @@ class _AssistantOverlayState extends State<AssistantOverlay>
   @override
   void dispose() {
     _controller.dispose();
+    _aiInputController.dispose();
+    _aiInputFocusNode.dispose();
     super.dispose();
   }
 
@@ -76,13 +94,22 @@ class _AssistantOverlayState extends State<AssistantOverlay>
     Color orbColor = const Color(0xFFC2B180);
     String message = "Listening...";
 
+    bool isAiMode = _status == AssistantStatus.ai_listening || _status == AssistantStatus.ai_responding;
+
     if (_status == AssistantStatus.processing) {
       orbColor = Colors.cyanAccent;
       message = "Understanding...";
     } else if (_status == AssistantStatus.responding) {
       orbColor = Colors.greenAccent;
       message = "Syncing with your mood...";
+    } else if (_status == AssistantStatus.ai_listening) {
+      orbColor = Colors.blueAccent;
+      message = "Ask me anything...";
+    } else if (_status == AssistantStatus.ai_responding) {
+      orbColor = Colors.purpleAccent;
+      message = "Climora AI is responding...";
     }
+
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(24),
@@ -91,111 +118,163 @@ class _AssistantOverlayState extends State<AssistantOverlay>
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.8),
+            color: Colors.black.withOpacity(0.8),
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: orbColor.withValues(alpha: 0.2)),
+            border: Border.all(color: orbColor.withOpacity(0.2)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.5),
+                color: Colors.black.withOpacity(0.5),
                 blurRadius: 30,
                 offset: const Offset(0, 10),
               ),
             ],
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
             children: [
-              // Left Group: Mic & Text
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Pulsating Mic Icon
-                  Stack(
-                    alignment: Alignment.center,
+                  // Left Group: Mic & Text
+                  Row(
                     children: [
-                      AnimatedBuilder(
-                        animation: _controller,
-                        builder: (context, child) {
-                          return Container(
+                      // Pulsating Mic Icon
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          AnimatedBuilder(
+                            animation: _controller,
+                            builder: (context, child) {
+                              return Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: orbColor.withOpacity(0.1),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: orbColor.withOpacity(
+                                        0.2 * _controller.value,
+                                      ),
+                                      blurRadius: 12,
+                                      spreadRadius: 4 * _controller.value,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                          Container(
                             width: 40,
                             height: 40,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: orbColor.withValues(alpha: 0.1),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: orbColor.withValues(
-                                    alpha: 0.2 * _controller.value,
-                                  ),
-                                  blurRadius: 12,
-                                  spreadRadius: 4 * _controller.value,
-                                ),
-                              ],
+                              border: Border.all(
+                                color: orbColor.withOpacity(0.3),
+                              ),
+                              color: orbColor.withOpacity(0.1),
                             ),
-                          );
-                        },
-                      ),
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: orbColor.withValues(alpha: 0.3),
+                            child: Icon( isAiMode ? Icons.computer : Icons.mic, color: orbColor, size: 20),
                           ),
-                          color: orbColor.withValues(alpha: 0.1),
-                        ),
-                        child: Icon(Icons.mic, color: orbColor, size: 20),
+                        ],
+                      ),
+                      const SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            message.toUpperCase(),
+                            style: GoogleFonts.spaceGrotesk(
+                              color: orbColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          if (!isAiMode)
+                            Text(
+                              _lastCommand.isEmpty
+                                  ? '\"Hey Climora...\" '
+                                  : '\"$_lastCommand\"',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.spaceGrotesk(
+                                color: Colors.white.withOpacity(0.4),
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                        ],
                       ),
                     ],
                   ),
-                  const SizedBox(width: 16),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        message.toUpperCase(),
+                  if (!isAiMode)
+                  // Right Group: Waveform
+                    SizedBox(
+                      height: 32,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: List.generate(5, (index) {
+                          return _WaveformBar(color: orbColor, delay: index * 0.1);
+                        }),
+                      ),
+                    )
+                  else
+                    TextButton(
+                      onPressed: () {
+                        _service.exitAiMode();
+                         _aiInputController.clear();
+                      },
+                      child: Text(
+                        "EXIT AI",
                         style: GoogleFonts.spaceGrotesk(
                           color: orbColor,
                           fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                          letterSpacing: 2,
                         ),
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                        _lastCommand.isEmpty
-                            ? '"Hey Climora..." '
-                            : '"$_lastCommand"',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.spaceGrotesk(
-                          color: Colors.white.withValues(alpha: 0.4),
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
                 ],
               ),
-              // Right Group: Waveform
-              SizedBox(
-                height: 32,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: List.generate(5, (index) {
-                    return _WaveformBar(color: orbColor, delay: index * 0.1);
-                  }),
-                ),
-              ),
+              if(isAiMode)
+                const SizedBox(height: 20),
+              if(isAiMode)
+                _buildAiInteractionUI(),
+
             ],
           ),
         ),
       ),
     );
   }
+  
+  Widget _buildAiInteractionUI() {
+    if (_status == AssistantStatus.ai_responding) {
+      return Text(
+        _lastAiResponse,
+        style: GoogleFonts.spaceGrotesk(color: Colors.white),
+      );
+    }
+    
+    return TextField(
+      controller: _aiInputController,
+      focusNode: _aiInputFocusNode,
+      style: GoogleFonts.spaceGrotesk(color: Colors.white),
+      decoration: InputDecoration(
+        hintText: "Type your message...",
+        hintStyle: GoogleFonts.spaceGrotesk(color: Colors.white.withOpacity(0.5)),
+        border: InputBorder.none,
+      ),
+      onSubmitted: (value) {
+        if(value.isNotEmpty) {
+          _service.processCommand(value);
+          _aiInputController.clear();
+        }
+      },
+    );
+  }
+  
 }
 
 class _WaveformBar extends StatefulWidget {

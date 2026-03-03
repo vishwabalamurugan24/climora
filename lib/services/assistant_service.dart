@@ -1,5 +1,7 @@
-import 'dart:async';
+'''import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AssistantService {
   static final AssistantService _instance = AssistantService._internal();
@@ -12,18 +14,19 @@ class AssistantService {
   final _commandController = StreamController<String>.broadcast();
   Stream<String> get commandStream => _commandController.stream;
 
+  final _aiResponseController = StreamController<String>.broadcast();
+  Stream<String> get aiResponseStream => _aiResponseController.stream;
+
   AssistantStatus _currentStatus = AssistantStatus.idle;
   AssistantStatus get currentStatus => _currentStatus;
 
   bool _isListening = false;
+  bool _isAiMode = false;
 
   void startListening() {
     if (_isListening) return;
     _isListening = true;
     _setStatus(AssistantStatus.idle);
-
-    // Simulate background listening for wake word
-    // In a real app, this would use a speech-to-text package with wake-word support
     debugPrint("AI Assistant is now listening for 'Hey Climora'...");
   }
 
@@ -32,7 +35,6 @@ class AssistantService {
     _setStatus(AssistantStatus.idle);
   }
 
-  // Simulate wake word detection
   void simulateWakeWord() {
     if (!_isListening) return;
     _setStatus(AssistantStatus.listening);
@@ -41,10 +43,10 @@ class AssistantService {
     // Simulate command processing after 3 seconds
     Timer(const Duration(seconds: 3), () {
       if (_currentStatus == AssistantStatus.listening) {
-        // Mock command
         final mockCommands = [
           "Play some happy music",
           "I'm feeling sad",
+          "Ask the AI what is the capital of France",
           "Play rain sounds",
           "Find a calm playlist",
         ];
@@ -55,34 +57,38 @@ class AssistantService {
     });
   }
 
-  void processCommand(String command) {
+  Future<void> processCommand(String command) async {
+    if (_isAiMode) {
+      _askAi(command);
+      return;
+    }
+
     _commandController.add(command);
     _setStatus(AssistantStatus.processing);
     debugPrint("Processing command: $command");
 
     final String lowerCommand = command.toLowerCase();
 
+    if (_matches(lowerCommand, ["ask ai", "ask the ai"])) {
+      _isAiMode = true;
+      final query = lowerCommand.replaceFirst("ask ai", "").replaceFirst("ask the ai", "").trim();
+      if (query.isNotEmpty) {
+        _askAi(query);
+      } else {
+        _setStatus(AssistantStatus.ai_listening);
+      }
+      return;
+    }
+
     // Multilingual Keyword Mapping
     String mood = "calm";
 
-    // Happy Keywords (English, Spanish, French, German, Hindi)
-    if (_matches(lowerCommand, [
-      "happy",
-      "feliz",
-      "heureux",
-      "glücklich",
-      "khush",
-    ])) {
+    // Happy Keywords
+    if (_matches(lowerCommand, ["happy", "feliz", "heureux", "glücklich", "khush"])) {
       mood = "happy";
     }
     // Calm Keywords
-    else if (_matches(lowerCommand, [
-      "calm",
-      "tranquilo",
-      "calme",
-      "ruhig",
-      "shant",
-    ])) {
+    else if (_matches(lowerCommand, ["calm", "tranquilo", "calme", "ruhig", "shant"])) {
       mood = "calm";
     }
     // Sad Keywords
@@ -90,23 +96,11 @@ class AssistantService {
       mood = "sad";
     }
     // Focus Keywords
-    else if (_matches(lowerCommand, [
-      "focus",
-      "enfoque",
-      "concentration",
-      "fokus",
-      "dhyan",
-    ])) {
+    else if (_matches(lowerCommand, ["focus", "enfoque", "concentration", "fokus", "dhyan"])) {
       mood = "focus";
     }
     // Rain Keywords
-    else if (_matches(lowerCommand, [
-      "rain",
-      "lluvia",
-      "pluie",
-      "regen",
-      "baarish",
-    ])) {
+    else if (_matches(lowerCommand, ["rain", "lluvia", "pluie", "regen", "baarish"])) {
       mood = "rain";
     }
 
@@ -120,6 +114,39 @@ class AssistantService {
     });
   }
 
+  Future<void> _askAi(String query) async {
+    _setStatus(AssistantStatus.processing);
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:3000/api/ai/chat'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'message': query}),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        _aiResponseController.add(data['content']);
+        _setStatus(AssistantStatus.ai_responding);
+      } else {
+        _aiResponseController.add("Error: ${response.body}");
+        _setStatus(AssistantStatus.ai_responding);
+      }
+    } catch (e) {
+      _aiResponseController.add("Error: $e");
+      _setStatus(AssistantStatus.ai_responding);
+    }
+     Timer(const Duration(seconds: 3), () {
+        if(!_isAiMode)
+        {
+           _setStatus(AssistantStatus.idle);
+        }
+        else{
+          _setStatus(AssistantStatus.ai_listening);
+        }
+      });
+  }
+
+
   bool _matches(String command, List<String> keywords) {
     for (var word in keywords) {
       if (command.contains(word)) return true;
@@ -132,10 +159,17 @@ class AssistantService {
     _statusController.add(status);
   }
 
+  void exitAiMode() {
+    _isAiMode = false;
+    _setStatus(AssistantStatus.idle);
+  }
+
   void dispose() {
     _statusController.close();
     _commandController.close();
+    _aiResponseController.close();
   }
 }
 
-enum AssistantStatus { idle, listening, processing, responding }
+enum AssistantStatus { idle, listening, processing, responding, ai_listening, ai_responding }
+''

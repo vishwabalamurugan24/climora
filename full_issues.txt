@@ -1,22 +1,102 @@
-﻿Analyzing climora...                                            
+Analyzing climora...                                            
 
-  error - The constructor being called isn't a const constructor - lib\screens\desktop_home_view.dart:116:32 - const_with_non_const
-   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:119:34 - unnecessary_const
-   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:127:23 - unnecessary_const
-  error - The constructor being called isn't a const constructor - lib\screens\desktop_home_view.dart:129:32 - const_with_non_const
-   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:132:34 - unnecessary_const
-   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:140:23 - unnecessary_const
-  error - The constructor being called isn't a const constructor - lib\screens\desktop_home_view.dart:142:32 - const_with_non_const
-   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:145:34 - unnecessary_const
-   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:152:23 - unnecessary_const
-  error - The constructor being called isn't a const constructor - lib\screens\desktop_home_view.dart:154:32 - const_with_non_const
-   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:157:34 - unnecessary_const
-  error - The constructor being called isn't a const constructor - lib\screens\desktop_home_view.dart:202:32 - const_with_non_const
-   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:204:34 - unnecessary_const
-   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:211:23 - unnecessary_const
-  error - The constructor being called isn't a const constructor - lib\screens\desktop_home_view.dart:213:32 - const_with_non_const
-   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:215:34 - unnecessary_const
-   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:222:23 - unnecessary_const
-  error - The constructor being called isn't a const constructor - lib\screens\desktop_home_view.dart:224:32 - const_with_non_const
-   info - Unnecessary 'const' keyword - lib\screens\desktop_home_view.dart:226:34 - unnecessary_const
+  error • Target of URI doesn't exist: 'package:climora/core/errors/exceptions.dart' • lib/data/datasources/remote_music_database.dart:4:8 • uri_does_not_exist
+  error • Target of URI doesn't exist: 'package:climora/data/models/song_model.dart' • lib/data/datasources/remote_music_database.dart:5:8 • uri_does_not_exist
+  error • The name 'SongModel' isn't a type, so it can't be used as a type argument • lib/data/datasources/remote_music_database.dart:8:15 • non_type_as_type_argument
+  error • The name 'SongModel' isn't a type, so it can't be used as a type argument • lib/data/datasources/remote_music_database.dart:17:15 • non_type_as_type_argument
+  error • Undefined name 'SongModel' • lib/data/datasources/remote_music_database.dart:27:34 • undefined_identifier
+  error • The method 'ServerException' isn't defined for the type 'RemoteMusicDatabaseImpl' • lib/data/datasources/remote_music_database.dart:29:13 • undefined_method
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/main.dart:256:26 • deprecated_member_use
+   info • Constructors for public widgets should have a named 'key' parameter • lib/screens/ai_screen.dart:5:7 • use_key_in_widget_constructors
+   info • Invalid use of a private type in a public API • lib/screens/ai_screen.dart:7:3 • library_private_types_in_public_api
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/desktop_home_view.dart:260:29 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/desktop_home_view.dart:262:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/desktop_home_view.dart:277:29 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/desktop_home_view.dart:279:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/desktop_home_view.dart:326:31 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/desktop_home_view.dart:328:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/desktop_home_view.dart:332:39 • deprecated_member_use
+   info • Unnecessary 'const' keyword • lib/screens/desktop_home_view.dart:394:30 • unnecessary_const
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/desktop_home_view.dart:408:43 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:197:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:206:45 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:222:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:224:39 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:256:33 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:257:52 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:297:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:444:33 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:446:51 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:447:52 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:448:53 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:449:54 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:597:29 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:599:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/screens/home_screen.dart:620:40 • deprecated_member_use
+  error • Expected a method, getter, setter or operator declaration • lib/services/assistant_service.dart:1:1 • expected_executable
+  error • Expected a method, getter, setter or operator declaration • lib/services/assistant_service.dart:68:37 • expected_executable
+   info • An uninitialized variable should have an explicit type annotation • lib/services/assistant_service.dart:68:38 • prefer_typing_uninitialized_variables
+   info • Missing type annotation • lib/services/assistant_service.dart:68:38 • strict_top_level_inference
+  error • Expected to find ';' • lib/services/assistant_service.dart:68:38 • expected_token
+  error • Variables must be declared using the keywords 'const', 'final', 'var' or a type name • lib/services/assistant_service.dart:68:38 • missing_const_final_var_or_type
+  error • Expected a method, getter, setter or operator declaration • lib/services/assistant_service.dart:68:45 • expected_executable
+  error • Expected a method, getter, setter or operator declaration • lib/services/assistant_service.dart:109:39 • expected_executable
+   info • An uninitialized variable should have an explicit type annotation • lib/services/assistant_service.dart:109:40 • prefer_typing_uninitialized_variables
+   info • Missing type annotation • lib/services/assistant_service.dart:109:40 • strict_top_level_inference
+  error • Expected to find ';' • lib/services/assistant_service.dart:109:40 • expected_token
+  error • Variables must be declared using the keywords 'const', 'final', 'var' or a type name • lib/services/assistant_service.dart:109:40 • missing_const_final_var_or_type
+  error • Expected a method, getter, setter or operator declaration • lib/services/assistant_service.dart:109:44 • expected_executable
+  error • Expected a method, getter, setter or operator declaration • lib/services/assistant_service.dart:131:43 • expected_executable
+   info • Missing type annotation • lib/services/assistant_service.dart:131:45 • strict_top_level_inference
+  error • Functions must have an explicit list of parameters • lib/services/assistant_service.dart:131:45 • missing_function_parameters
+  error • A function body must be provided • lib/services/assistant_service.dart:131:53 • missing_function_body
+  error • Expected a method, getter, setter or operator declaration • lib/services/assistant_service.dart:131:53 • expected_executable
+   info • An uninitialized variable should have an explicit type annotation • lib/services/assistant_service.dart:131:54 • prefer_typing_uninitialized_variables
+   info • Missing type annotation • lib/services/assistant_service.dart:131:54 • strict_top_level_inference
+  error • Expected to find ';' • lib/services/assistant_service.dart:131:54 • expected_token
+  error • Variables must be declared using the keywords 'const', 'final', 'var' or a type name • lib/services/assistant_service.dart:131:54 • missing_const_final_var_or_type
+  error • Expected a method, getter, setter or operator declaration • lib/services/assistant_service.dart:131:58 • expected_executable
+  error • Expected a method, getter, setter or operator declaration • lib/services/assistant_service.dart:131:59 • expected_executable
+  error • Expected a method, getter, setter or operator declaration • lib/services/assistant_service.dart:135:41 • expected_executable
+   info • An uninitialized variable should have an explicit type annotation • lib/services/assistant_service.dart:135:42 • prefer_typing_uninitialized_variables
+   info • Missing type annotation • lib/services/assistant_service.dart:135:42 • strict_top_level_inference
+  error • Expected to find ';' • lib/services/assistant_service.dart:135:42 • expected_token
+  error • Variables must be declared using the keywords 'const', 'final', 'var' or a type name • lib/services/assistant_service.dart:135:42 • missing_const_final_var_or_type
+  error • Expected a method, getter, setter or operator declaration • lib/services/assistant_service.dart:135:43 • expected_executable
+  error • Unterminated string literal • lib/services/assistant_service.dart:175:2 • unterminated_string_literal
+  error • The name 'log' is defined in the libraries 'dart:developer' and 'dart:math' • lib/services/location_service.dart:39:7 • ambiguous_import
+  error • Undefined class 'AssistantService' • lib/widgets/assistant_overlay.dart:17:9 • undefined_class
+  error • The method 'AssistantService' isn't defined for the type '_AssistantOverlayState' • lib/widgets/assistant_overlay.dart:17:37 • undefined_method
+  error • Undefined class 'AssistantStatus' • lib/widgets/assistant_overlay.dart:19:3 • undefined_class
+  error • Undefined name 'AssistantStatus' • lib/widgets/assistant_overlay.dart:19:29 • undefined_identifier
+  error • Undefined name 'AssistantStatus' • lib/widgets/assistant_overlay.dart:38:24 • undefined_identifier
+  error • Undefined name 'AssistantStatus' • lib/widgets/assistant_overlay.dart:74:24 • undefined_identifier
+  error • Undefined name 'AssistantStatus' • lib/widgets/assistant_overlay.dart:97:32 • undefined_identifier
+  error • Undefined name 'AssistantStatus' • lib/widgets/assistant_overlay.dart:97:75 • undefined_identifier
+  error • Undefined name 'AssistantStatus' • lib/widgets/assistant_overlay.dart:99:20 • undefined_identifier
+  error • Undefined name 'AssistantStatus' • lib/widgets/assistant_overlay.dart:102:27 • undefined_identifier
+  error • Undefined name 'AssistantStatus' • lib/widgets/assistant_overlay.dart:105:27 • undefined_identifier
+  error • Undefined name 'AssistantStatus' • lib/widgets/assistant_overlay.dart:108:27 • undefined_identifier
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/assistant_overlay.dart:121:33 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/assistant_overlay.dart:123:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/assistant_overlay.dart:126:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/assistant_overlay.dart:152:51 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/assistant_overlay.dart:155:55 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/assistant_overlay.dart:172:49 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/assistant_overlay.dart:174:47 • deprecated_member_use
+   info • Unnecessary escape in string literal • lib/widgets/assistant_overlay.dart:198:38 • unnecessary_string_escapes
+   info • Unnecessary escape in string literal • lib/widgets/assistant_overlay.dart:198:54 • unnecessary_string_escapes
+   info • Unnecessary escape in string literal • lib/widgets/assistant_overlay.dart:199:38 • unnecessary_string_escapes
+   info • Unnecessary escape in string literal • lib/widgets/assistant_overlay.dart:199:53 • unnecessary_string_escapes
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/assistant_overlay.dart:203:53 • deprecated_member_use
+  error • Undefined name 'AssistantStatus' • lib/widgets/assistant_overlay.dart:253:20 • undefined_identifier
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/assistant_overlay.dart:266:65 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/desktop_now_playing_panel.dart:19:29 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/desktop_now_playing_panel.dart:21:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/desktop_now_playing_panel.dart:54:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/desktop_now_playing_panel.dart:74:36 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/desktop_now_playing_panel.dart:234:52 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/desktop_now_playing_panel.dart:258:54 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/widgets/desktop_now_playing_panel.dart:340:31 • deprecated_member_use
 
+98 issues found. (ran in 9.3s)

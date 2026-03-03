@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:math' as math;
 import '../widgets/climora_bottom_nav.dart';
 import '../presentation/widgets/voice_orb.dart';
+import '../widgets/assistant_overlay.dart';
 import 'desktop_home_view.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,23 +23,25 @@ class _HomeScreenState extends State<HomeScreen> {
     const primaryColor = Color(0xFFC2B180);
     const backgroundDark = Color(0xFF0A1F1F);
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth > 1100) {
-          return DesktopHomeView(
-            primaryColor: primaryColor,
-            backgroundDark: backgroundDark,
+    return AssistantOverlay(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth > 1100) {
+            return DesktopHomeView(
+              primaryColor: primaryColor,
+              backgroundDark: backgroundDark,
+            );
+          }
+          return _MobileHomeView(
+            isListening: _isListening,
+            voiceVolume: _voiceVolume,
+            onVoiceToggle: () {
+              setState(() => _isListening = !_isListening);
+              if (_isListening) _simulateVoice();
+            },
           );
-        }
-        return _MobileHomeView(
-          isListening: _isListening,
-          voiceVolume: _voiceVolume,
-          onVoiceToggle: () {
-            setState(() => _isListening = !_isListening);
-            if (_isListening) _simulateVoice();
-          },
-        );
-      },
+        },
+      ),
     );
   }
 
@@ -191,7 +194,7 @@ class _HeaderSection extends StatelessWidget {
                   Icon(
                     Icons.location_on,
                     size: 14,
-                    color: primaryColor.withValues(alpha: 0.8),
+                    color: primaryColor.withOpacity(0.8),
                   ),
                   const SizedBox(width: 4),
                   Text(
@@ -200,7 +203,7 @@ class _HeaderSection extends StatelessWidget {
                       textStyle: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: primaryColor.withValues(alpha: 0.8),
+                        color: primaryColor.withOpacity(0.8),
                         letterSpacing: 1,
                       ),
                     ),
@@ -216,9 +219,9 @@ class _HeaderSection extends StatelessWidget {
               width: 48,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: primaryColor.withValues(alpha: 0.1),
+                color: primaryColor.withOpacity(0.1),
                 border: Border.all(
-                  color: primaryColor.withValues(alpha: 0.3),
+                  color: primaryColor.withOpacity(0.3),
                   width: 2,
                 ),
                 image: const DecorationImage(
@@ -250,8 +253,8 @@ class _WeatherDashboard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.03),
-            border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
+            color: Colors.white.withOpacity(0.03),
+            border: Border.all(color: primaryColor.withOpacity(0.1)),
             borderRadius: BorderRadius.circular(16),
           ),
           child: Row(
@@ -291,7 +294,7 @@ class _WeatherDashboard extends StatelessWidget {
               Container(
                 height: 40,
                 width: 1,
-                color: primaryColor.withValues(alpha: 0.2),
+                color: primaryColor.withOpacity(0.2),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -438,12 +441,12 @@ class _MoodCard extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.3),
+            color: Colors.black.withOpacity(0.3),
             border: Border(
-              top: BorderSide(color: primaryColor.withValues(alpha: 0.2)),
-              left: BorderSide(color: primaryColor.withValues(alpha: 0.05)),
-              right: BorderSide(color: primaryColor.withValues(alpha: 0.05)),
-              bottom: BorderSide(color: primaryColor.withValues(alpha: 0.05)),
+              top: BorderSide(color: primaryColor.withOpacity(0.2)),
+              left: BorderSide(color: primaryColor.withOpacity(0.05)),
+              right: BorderSide(color: primaryColor.withOpacity(0.05)),
+              bottom: BorderSide(color: primaryColor.withOpacity(0.05)),
             ),
             borderRadius: BorderRadius.circular(16),
           ),
@@ -591,9 +594,9 @@ class _RecommendationCard extends StatelessWidget {
     return Container(
       width: 260,
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.3),
+        color: Colors.black.withOpacity(0.3),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: primaryColor.withValues(alpha: 0.05)),
+        border: Border.all(color: primaryColor.withOpacity(0.05)),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -614,7 +617,7 @@ class _RecommendationCard extends StatelessWidget {
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
                       colors: [
-                        backgroundDark.withValues(alpha: 0.8),
+                        backgroundDark.withOpacity(0.8),
                         Colors.transparent,
                       ],
                     ),
