@@ -8,6 +8,8 @@ import 'screens/weather_screen.dart';
 import 'screens/navigation_screen.dart';
 import 'screens/recovery_screen.dart';
 
+import 'package:provider/provider.dart';
+import 'providers/weather_theme_provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'presentation/blocs/aura/aura_bloc.dart';
 import 'presentation/blocs/aura/aura_event.dart';
@@ -16,7 +18,13 @@ import 'services/weather_service.dart';
 
 void main() {
   runApp(
-    BlocProvider(create: (context) => AuraBloc(), child: const ClimoraApp()),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => WeatherThemeProvider()),
+        BlocProvider(create: (context) => AuraBloc()),
+      ],
+      child: const ClimoraApp(),
+    ),
   );
 }
 
