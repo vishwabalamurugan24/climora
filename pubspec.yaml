@@ -39,11 +39,11 @@ dependencies:
   # Text-to-speech
   flutter_tts: ^4.2.5
   # Audio playback and session management
-  just_audio: ^0.10.5
+  just_audio: ^0.9.36
   audio_session: ^0.1.21
   # Permissions and location
   permission_handler: ^12.0.1
-  geolocator: ^14.0.2
+  geolocator: ^10.1.0
   # HTTP client for climate APIs
   http: ^1.2.0
   # Environment variables for API keys
@@ -66,6 +66,10 @@ dependencies:
   lottie: ^2.3.2
   intl: ^0.18.1
   google_fonts: ^6.2.1
+  # Firebase
+  firebase_core: ^3.6.0
+  cloud_firestore: ^5.4.0
+  firebase_auth: ^4.16.0
 
   # Assets directory for ambient audio
 

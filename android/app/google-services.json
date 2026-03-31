@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "167361576773",
+    "project_id": "climora-musical-app1",
+    "storage_bucket": "climora-musical-app1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167361576773:android:2922733fe177bddbb2482c",
+        "android_client_info": {
+          "package_name": "com.example.climora"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnR3FqjgXwj5BJZd3nS2Ef2WhtZipTj34"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
