@@ -1,8 +1,8 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:climora/core/errors/exceptions.dart';
-import 'package:climora/domain/entities/song_entity.dart';
+import '../../core/errors/exceptions.dart';
+import '../../domain/entities/song_entity.dart';
 
 abstract class RemoteMusicDatabase {
   Future<List<SongEntity>> getSongs();
