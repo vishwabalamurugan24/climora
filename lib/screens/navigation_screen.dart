@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:climora/core/theme/app_theme.dart';
 import 'package:climora/services/location_service.dart';
 import 'package:climora/domain/entities/place_recommendation.dart';
+import '../widgets/climora_bottom_nav.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});
@@ -164,6 +165,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
             ),
 
           if (_isLoading) const Center(child: CircularProgressIndicator()),
+
+          // Bottom Nav Bar
+          const ClimoraBottomNav(currentRoute: '/navigation'),
         ],
       ),
     );
@@ -211,7 +215,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, '/home'),
                   child: const Text('Start Navigation'),
                 ),
               ),

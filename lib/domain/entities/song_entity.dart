@@ -26,4 +26,32 @@ class SongEntity extends Equatable {
 
   @override
   List<Object?> get props => [id, title, artist, assetPath];
+
+  factory SongEntity.fromJson(Map<String, dynamic> json) {
+    return SongEntity(
+      id: json['id'],
+      title: json['title'],
+      artist: json['artist'],
+      assetPath: json['assetPath'],
+      genres: List<String>.from(json['genres']),
+      languages: List<String>.from(json['languages']),
+      moods: (json['moods'] as List).map((e) => SongMood.values.firstWhere((element) => element.toString().split('.').last == e)).toList(),
+      weatherTriggers: (json['weatherTriggers'] as List).map((e) => WeatherTrigger.values.firstWhere((element) => element.toString().split('.').last == e)).toList(),
+      idealTimeRanges: (json['idealTimeRanges'] as List).map((e) => TimeRange.values.firstWhere((element) => element.toString().split('.').last == e)).toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'artist': artist,
+      'assetPath': assetPath,
+      'genres': genres,
+      'languages': languages,
+      'moods': moods.map((e) => e.toString().split('.').last).toList(),
+      'weatherTriggers': weatherTriggers.map((e) => e.toString().split('.').last).toList(),
+      'idealTimeRanges': idealTimeRanges.map((e) => e.toString().split('.').last).toList(),
+    };
+  }
 }

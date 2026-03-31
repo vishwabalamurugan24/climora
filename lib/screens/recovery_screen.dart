@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:climora/core/theme/app_theme.dart';
+import '../widgets/climora_bottom_nav.dart';
 
 class RecoveryScreen extends StatefulWidget {
   const RecoveryScreen({super.key});
@@ -165,7 +166,10 @@ class _RecoveryScreenState extends State<RecoveryScreen>
                           ),
                           const SizedBox(height: 20),
                           ElevatedButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () => Navigator.pushReplacementNamed(
+                              context,
+                              '/home',
+                            ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white10,
                               foregroundColor: Colors.white,
@@ -181,6 +185,34 @@ class _RecoveryScreenState extends State<RecoveryScreen>
               ],
             ),
           ),
+          if (_instruction == 'Prepare')
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 120,
+              child: Center(
+                child: Hero(
+                  tag: 'orb',
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppTheme.primaryBlue.withValues(alpha: 0.3),
+                          blurRadius: 20,
+                          spreadRadius: 5,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+          // Bottom Nav Bar
+          const ClimoraBottomNav(currentRoute: '/recovery'),
         ],
       ),
     );
